@@ -88,7 +88,7 @@ Every pitch is scored by AI across **clarity, market positioning, and uniqueness
 | **Discover & search**    | Browse all pitches with category filters, sort by recent / upvotes / views, and instant client-side fuzzy search via Fuse.js                             |
 | **Community engagement** | One-click upvotes, view counts, and threaded comments on every pitch                                                                                     |
 | **Founder profiles**     | Public author pages with avatar, stats, and authored pitches — created automatically on first sign-in                                                    |
-| **Authentication**       | GitHub OAuth via NextAuth v5; avatars uploaded to Sanity and an author document created on first login                                                   |
+| **Authentication**       | Google OAuth via NextAuth v5; avatars uploaded to Sanity and an author document created on first login                                                   |
 | **Headless CMS**         | Sanity Studio v5 with visual editing, live preview, and click-to-edit across a typed page builder                                                        |
 | **Page builder**         | Composable homepage blocks — hero, logo ticker, top pitches, integrations, FAQ — editable by non-technical editors                                       |
 | **Blog**                 | Rich-text articles with auto-generated table of contents and reading experience                                                                          |
@@ -107,7 +107,7 @@ Every pitch is scored by AI across **clarity, market positioning, and uniqueness
 - [Tailwind CSS](https://tailwindcss.com/) v4: Utility-first CSS framework.
 - [shadcn/ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/): Accessible component primitives.
 - [Google Gemini](https://ai.google.dev/): Generative AI for pitch analysis.
-- [NextAuth.js](https://authjs.dev/) v5: Authentication with GitHub OAuth.
+- [NextAuth.js](https://authjs.dev/) v5: Authentication with Google OAuth.
 - [Motion](https://motion.dev/): Animation library for React.
 - [Tiptap](https://tiptap.dev/) + [Novel](https://novel.sh/): Rich-text editing.
 - [TanStack Query](https://tanstack.com/query) & [SWR](https://swr.vercel.app/): Client data fetching.
@@ -176,8 +176,8 @@ NEXT_PUBLIC_SANITY_STUDIO_URL=
 SANITY_API_READ_TOKEN=
 SANITY_API_WRITE_TOKEN=
 AUTH_SECRET=
-AUTH_GITHUB_ID=
-AUTH_GITHUB_SECRET=
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
 GEMINI_API_KEY=
 ```
 
@@ -220,7 +220,7 @@ npm run type      # regenerate packages/sanity/src/sanity.types.ts
 - **Content flow** — Schemas live in `apps/studio/schemaTypes/`; GROQ queries in `packages/sanity` are fetched server-side via a `defineLive` wrapper for automatic revalidation. All frontend types are derived from generated Sanity types.
 - **Page builder** — An array of typed blocks rendered by `apps/web/src/components/pagebuilder.tsx`, mapping each `_type` to a React component with click-to-edit visual editing.
 - **AI analysis** — `apps/web/src/lib/gemini.ts` calls Google Gemini; the response is validated with Zod (clarity / market positioning / uniqueness scores + suggestions) and rendered in the pitch detail view.
-- **Auth** — NextAuth v5 with GitHub; on first sign-in the GitHub avatar is uploaded to Sanity and an `author` document is created, with the Sanity author `_id` carried through the session.
+- **Auth** — NextAuth v5 with Google; on first sign-in the Google avatar is uploaded to Sanity and an `author` document is created, with the Sanity author `_id` carried through the session.
 
 ## 🔧 Contributing
 
