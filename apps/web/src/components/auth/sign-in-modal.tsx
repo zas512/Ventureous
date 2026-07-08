@@ -25,7 +25,7 @@ export function SignInModal({ open, onOpenChange }: SignInModalProps) {
       <DialogContent className="border-neutral-200 dark:border-white/10 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl sm:max-w-sm">
         <DialogHeader className="items-center text-center">
           {/* Gradient icon */}
-          <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 shadow-lg shadow-pink-500/20">
+          <div className="bg-linear-to-br mx-auto mb-2 flex size-12 items-center justify-center rounded-2xl from-pink-500 to-purple-600 shadow-lg shadow-pink-500/20">
             <svg
               viewBox="0 0 24 24"
               fill="none"

@@ -1,11 +1,25 @@
 import { client } from "@workspace/sanity/client";
-import { queryAuthorByGithubId } from "@workspace/sanity/query";
+import { queryAuthorByGoogleId } from "@workspace/sanity/query";
 import { writeClient } from "@workspace/sanity/write-client";
 import NextAuth, { type NextAuthResult } from "next-auth";
-import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 
-/** Download a GitHub avatar and upload it to Sanity as an image asset. */
-async function uploadGithubAvatar(avatarUrl: string, username: string) {
+type GoogleProfile = {
+  sub: string;
+  name?: string | null;
+  email?: string | null;
+  picture?: string | null;
+};
+
+function getUsername(email?: string | null, name?: string | null) {
+  if (email) {
+    return email.split("@")[0] ?? email;
+  }
+
+  return name?.trim().toLowerCase().replace(/\s+/g, "-") ?? "user";
+}
+
+async function uploadGoogleAvatar(avatarUrl: string, username: string) {
   const res = await fetch(avatarUrl);
   if (!res.ok) return undefined;
   const buffer = Buffer.from(await res.arrayBuffer());
@@ -20,37 +34,38 @@ async function uploadGithubAvatar(avatarUrl: string, username: string) {
 }
 
 const nextAuth: NextAuthResult = NextAuth({
-  providers: [GitHub],
+  providers: [Google],
   callbacks: {
     async signIn({ user: { name, email, image }, profile }) {
       if (!profile) {
         return false;
       }
 
-      const { id, login, bio } = profile;
-      const avatarUrl =
-        image || (profile as { avatar_url?: string }).avatar_url;
+      const googleProfile = profile as GoogleProfile;
+      const googleId = googleProfile.sub;
+      const username = getUsername(email, name);
+      const avatarUrl = image || googleProfile.picture || undefined;
 
       const existingUser = await client
         .withConfig({ useCdn: false })
-        .fetch(queryAuthorByGithubId, { id });
+        .fetch(queryAuthorByGoogleId, { id: googleId });
 
       if (!existingUser) {
         const imageField = avatarUrl
-          ? await uploadGithubAvatar(avatarUrl, login as string)
+          ? await uploadGoogleAvatar(avatarUrl, username)
           : undefined;
 
         await writeClient.create({
           _type: "author",
-          githubId: id,
-          name: name || login,
-          username: login,
+          googleId,
+          name: name || username,
+          username,
           email: email || "",
-          bio: (bio as string) || "",
+          bio: "",
           ...(imageField && { image: imageField }),
         });
       } else if (!existingUser.image && avatarUrl) {
-        const imageField = await uploadGithubAvatar(avatarUrl, login as string);
+        const imageField = await uploadGoogleAvatar(avatarUrl, username);
         if (imageField) {
           await writeClient
             .patch(existingUser._id)
@@ -65,7 +80,9 @@ const nextAuth: NextAuthResult = NextAuth({
       if (account && profile) {
         const user = await client
           .withConfig({ useCdn: false })
-          .fetch(queryAuthorByGithubId, { id: profile.id });
+          .fetch(queryAuthorByGoogleId, {
+            id: (profile as GoogleProfile).sub,
+          });
 
         token.id = user?._id;
       }

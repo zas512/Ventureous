@@ -658,8 +658,8 @@ export const queryPlaylistBySlug = defineQuery(`
 
 // ─── Author Queries ───
 
-export const queryAuthorByGithubId = defineQuery(`
-  *[_type == "author" && githubId == $id][0]
+export const queryAuthorByGoogleId = defineQuery(`
+  *[_type == "author" && googleId == $id][0]
 `);
 
 export const queryAuthorById = defineQuery(`
