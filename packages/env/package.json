@@ -16,7 +16,7 @@
   "devDependencies": {
     "@types/node": "^24.10.9",
     "@workspace/typescript-config": "file:../typescript-config",
-    "typescript": "5.9.2"
+    "typescript": "7.0.2"
   },
   "exports": {
     "./client": "./src/client.ts",

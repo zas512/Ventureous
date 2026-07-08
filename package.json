@@ -26,7 +26,7 @@
     "@tailwindcss/typography": "^0.5.20",
     "@workspace/typescript-config": "file:packages/typescript-config",
     "turbo": "^2.10.4",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "ultracite": "7.9.3"
   },
   "engines": {
