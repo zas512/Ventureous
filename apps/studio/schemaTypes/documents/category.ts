@@ -1,5 +1,8 @@
-import { TagIcon } from "@sanity/icons";
+import { Icon } from "@sanity/icons";
+import { createElement } from "react";
 import { defineField, defineType } from "sanity";
+
+const TagSymbolIcon = () => createElement(Icon, { symbol: "tag" });
 
 /**
  * Category document type with predefined options + "Other".
@@ -9,7 +12,7 @@ export const category = defineType({
   name: "category",
   title: "Category",
   type: "document",
-  icon: TagIcon,
+  icon: TagSymbolIcon,
   description: "Industry or topic category for classifying startups",
   fields: [
     defineField({

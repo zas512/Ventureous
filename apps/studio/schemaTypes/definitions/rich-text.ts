@@ -1,10 +1,14 @@
-import { ImageIcon, LinkIcon } from "@sanity/icons";
+import { Icon } from "@sanity/icons";
+import { createElement } from "react";
 import {
   type ConditionalProperty,
   defineArrayMember,
   defineField,
   defineType,
 } from "sanity";
+
+const LinkSymbolIcon = () => createElement(Icon, { symbol: "link" });
+const ImageSymbolIcon = () => createElement(Icon, { symbol: "image" });
 
 const richTextMembers = [
   defineArrayMember({
@@ -29,7 +33,7 @@ const richTextMembers = [
           name: "customLink",
           type: "object",
           title: "Internal/External Link",
-          icon: LinkIcon,
+          icon: LinkSymbolIcon,
           fields: [
             defineField({
               name: "customLink",
@@ -49,7 +53,7 @@ const richTextMembers = [
     name: "image",
     title: "Image",
     type: "image",
-    icon: ImageIcon,
+    icon: ImageSymbolIcon,
     options: {
       hotspot: true,
     },

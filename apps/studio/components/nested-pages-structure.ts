@@ -1,5 +1,5 @@
-import { DocumentIcon, FolderIcon } from "@sanity/icons";
-import { friendlyWords } from "friendlier-words";
+import { Icon } from "@sanity/icons";
+import { createElement } from "react";
 import { getPublishedId } from "sanity";
 import type { ListItemBuilder, StructureBuilder } from "sanity/structure";
 
@@ -28,6 +28,9 @@ type StructureOptions = {
 
 // Type for Sanity list items (includes dividers)
 type SanityListItem = ListItemBuilder | ReturnType<StructureBuilder["divider"]>;
+
+const DocumentSymbolIcon = () => createElement(Icon, { symbol: "document" });
+const FolderSymbolIcon = () => createElement(Icon, { symbol: "folder" });
 
 const DOCUMENTS_QUERY = `
   *[_type == $schemaType && defined(slug.current)] {
@@ -160,7 +163,7 @@ const createDocumentListItems = (
     S.listItem()
       .id(`doc-${uniqueId}-${docIndex}`)
       .title(doc.title || "Untitled")
-      .icon(DocumentIcon)
+      .icon(DocumentSymbolIcon)
       .child(S.document().documentId(doc._id).schemaType(schemaType))
   );
 
@@ -174,7 +177,7 @@ const createMainPageListItem = (
   S.listItem()
     .id(`main-${uniqueId}`)
     .title(mainPageDoc.title || "Untitled")
-    .icon(FolderIcon)
+    .icon(FolderSymbolIcon)
     .child(S.document().documentId(mainPageDoc._id).schemaType(schemaType));
 
 // Helper function to create folder list item with menu
@@ -184,13 +187,13 @@ const createFolderListItem = (
   uniqueId: string,
   listItems: SanityListItem[]
 ): ListItemBuilder => {
-  const pageSlug = friendlyWords();
-  const pageTitle = getTitleCase(pageSlug);
+  const pageSlug = "new-page";
+  const pageTitle = "New Page";
 
   return S.listItem()
     .id(uniqueId)
     .title(`${folder.title} (${folder.count})`)
-    .icon(FolderIcon)
+    .icon(FolderSymbolIcon)
     .child(
       S.list()
         .title(folder.title)
@@ -222,7 +225,7 @@ const createSingleDocumentListItem = (
   S.listItem()
     .id(`single-${doc._id}`)
     .title(doc.title || "Untitled")
-    .icon(DocumentIcon)
+    .icon(DocumentSymbolIcon)
     .child(S.document().documentId(doc._id).schemaType(schemaType));
 
 // Configuration type for processing folder items
@@ -336,7 +339,7 @@ export const createSlugBasedStructure = (
 
   return S.listItem()
     .title(`${getTitleCase(schemaType)}s by Path`)
-    .icon(FolderIcon)
+    .icon(FolderSymbolIcon)
     .child(async () => {
       try {
         // 1. Get client from context with error handling

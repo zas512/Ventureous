@@ -1,11 +1,17 @@
 import {
-  BlockElementIcon,
-  ComposeIcon,
-  InlineElementIcon,
-  InsertAboveIcon,
-  SearchIcon,
+  Icon,
 } from "@sanity/icons";
+import { createElement } from "react";
 import type { FieldGroupDefinition } from "sanity";
+
+const ComposeSymbolIcon = () => createElement(Icon, { symbol: "compose" });
+const SearchSymbolIcon = () => createElement(Icon, { symbol: "search" });
+const InsertAboveSymbolIcon = () =>
+  createElement(Icon, { symbol: "insert-above" });
+const BlockElementSymbolIcon = () =>
+  createElement(Icon, { symbol: "block-element" });
+const InlineElementSymbolIcon = () =>
+  createElement(Icon, { symbol: "inline-element" });
 
 export const GROUP = {
   SEO: "seo",
@@ -19,24 +25,24 @@ export const GROUPS: FieldGroupDefinition[] = [
   // { name: CONST.MAIN_CONTENT, default: true },
   {
     name: GROUP.MAIN_CONTENT,
-    icon: ComposeIcon,
+    icon: ComposeSymbolIcon,
     title: "Content",
     default: true,
   },
-  { name: GROUP.SEO, icon: SearchIcon, title: "SEO" },
+  { name: GROUP.SEO, icon: SearchSymbolIcon, title: "SEO" },
   {
     name: GROUP.OG,
-    icon: InsertAboveIcon,
+    icon: InsertAboveSymbolIcon,
     title: "Open Graph",
   },
   {
     name: GROUP.CARD,
-    icon: BlockElementIcon,
+    icon: BlockElementSymbolIcon,
     title: "Card",
   },
   {
     name: GROUP.RELATED,
-    icon: InlineElementIcon,
+    icon: InlineElementSymbolIcon,
     title: "Related",
   },
 ];

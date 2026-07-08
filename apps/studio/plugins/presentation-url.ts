@@ -1,13 +1,13 @@
 import type { SanityDocument } from "@sanity/client";
-import { EarthGlobeIcon } from "@sanity/icons";
+import { Icon } from "@sanity/icons";
 import { useToast } from "@sanity/ui";
-import { useCallback } from "react";
+import { createElement, useCallback } from "react";
 import {
   type DocumentActionComponent,
   definePlugin,
   getPublishedId,
   type SlugValue,
-  useEditState,
+  useEditState
 } from "sanity";
 import { useRouter } from "sanity/router";
 
@@ -42,27 +42,27 @@ export const presentationUrl = definePlugin(() => ({
               toast.push({
                 title: "No slug found",
                 status: "error",
-                description: "Please ensure the document has a valid slug",
+                description: "Please ensure the document has a valid slug"
               });
               return;
             }
             router.navigateUrl({
-              path: `/presentation?preview=${encodeURIComponent(slug)}`,
+              path: `/presentation?preview=${encodeURIComponent(slug)}`
             });
           }, [slug, toast, router]);
 
           return {
             type: "action" as const,
-            icon: EarthGlobeIcon,
+            icon: () => createElement(Icon, { symbol: "earth-globe" }),
             hidden: documentId === "root",
             disabled: !slug,
             renderAsButton: true,
             onAction: handlePresentationOpen,
-            title: "Open in Presentation",
+            title: "Open in Presentation"
           };
-        },
+        }
       },
-      ...props,
-    ],
-  },
+      ...props
+    ]
+  }
 }));

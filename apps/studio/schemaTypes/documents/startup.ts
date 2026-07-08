@@ -1,11 +1,14 @@
-import { RocketIcon } from "@sanity/icons";
+import { Icon } from "@sanity/icons";
+import { createElement } from "react";
 import { defineField, defineType } from "sanity";
+
+const RocketSymbolIcon = () => createElement(Icon, { symbol: "rocket" });
 
 export const startup = defineType({
   name: "startup",
   title: "Startup",
   type: "document",
-  icon: RocketIcon,
+  icon: RocketSymbolIcon,
   description: "A startup pitch submitted by a user",
   fields: [
     defineField({

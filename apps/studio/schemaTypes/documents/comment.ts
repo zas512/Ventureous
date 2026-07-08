@@ -1,11 +1,14 @@
-import { CommentIcon } from "@sanity/icons";
+import { Icon } from "@sanity/icons";
+import { createElement } from "react";
 import { defineField, defineType } from "sanity";
+
+const CommentSymbolIcon = () => createElement(Icon, { symbol: "comment" });
 
 export const comment = defineType({
   name: "comment",
   title: "Comment",
   type: "document",
-  icon: CommentIcon,
+  icon: CommentSymbolIcon,
   description: "A comment on a startup pitch",
   fields: [
     defineField({

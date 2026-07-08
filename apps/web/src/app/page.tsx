@@ -1,6 +1,5 @@
 import { sanityFetch } from "@workspace/sanity/live";
 import { queryHomePageData } from "@workspace/sanity/query";
-
 import { PageBuilder } from "@/components/pagebuilder";
 import { getSEOMetadata } from "@/lib/seo";
 
@@ -10,12 +9,13 @@ async function fetchHomePageData() {
 
 export async function generateMetadata() {
   const { data } = await fetchHomePageData();
+  console.log("Home page data:", data);
   return getSEOMetadata({
     title: data?.seoTitle ?? undefined,
     description: data?.seoDescription ?? undefined,
     slug: "/",
     contentId: data?._id,
-    contentType: data?._type,
+    contentType: data?._type
   });
 }
 

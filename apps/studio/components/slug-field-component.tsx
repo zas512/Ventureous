@@ -1,5 +1,6 @@
-import { CopyIcon } from "@sanity/icons";
+import { Icon } from "@sanity/icons";
 import { Box, Button, Card, Flex, Stack, Text, TextInput } from "@sanity/ui";
+import { createElement } from "react";
 import type { ChangeEvent } from "react";
 import { useCallback, useMemo } from "react";
 import {
@@ -15,6 +16,7 @@ import { ValidationMessages } from "@/components/url-slug/validation-messages";
 import { generateSlugFromTitle } from "@/utils/slug-validation";
 
 const presentationOriginUrl = process.env.SANITY_STUDIO_PRESENTATION_URL;
+const CopySymbolIcon = () => createElement(Icon, { symbol: "copy" });
 
 const monoStyle = { fontFamily: "monospace" } as const;
 
@@ -186,7 +188,7 @@ export function PathnameFieldComponent(props: ObjectFieldProps<SlugValue>) {
                 </Text>
               </Card>
               <Button
-                icon={CopyIcon}
+                icon={CopySymbolIcon}
                 mode="ghost"
                 onClick={handleCopyUrl}
                 padding={2}

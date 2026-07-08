@@ -1,4 +1,5 @@
-import { DocumentIcon } from "@sanity/icons";
+import { Icon } from "@sanity/icons";
+import { createElement } from "react";
 import { defineField, defineType } from "sanity";
 
 import {
@@ -10,11 +11,13 @@ import { GROUP, GROUPS } from "@/utils/constant";
 import { ogFields } from "@/utils/og-fields";
 import { seoFields } from "@/utils/seo-fields";
 
+const DocumentSymbolIcon = () => createElement(Icon, { symbol: "document" });
+
 export const page = defineType({
   name: "page",
   title: "Page",
   type: "document",
-  icon: DocumentIcon,
+  icon: DocumentSymbolIcon,
   description:
     "Create a new page for your website, like an 'About Us' or 'Contact' page. Each page has its own web address and content that you can customize.",
   groups: GROUPS,

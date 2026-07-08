@@ -32,6 +32,7 @@
     "@sanity/vision": "^6.4.0",
     "@workspace/logger": "file:../../packages/logger",
     "dotenv": "^17.4.2",
+    "easymde": "^2.21.0",
     "friendlier-words": "^1.2.0",
     "lucide-react": "^1.23.0",
     "react": "^19.2.7",

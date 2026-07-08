@@ -12,6 +12,8 @@
  * ---------------------------------------------------------------------------------
  */
 
+export declare const internalGroqTypeReferenceTo: unique symbol;
+
 // Source: schema.json
 export type Link = {
   title?: string;
@@ -525,7 +527,7 @@ export type Author = {
     _type: "image";
   };
   bio?: string;
-  githubId?: number;
+  googleId?: string;
   username?: string;
   email?: string;
 };
@@ -814,14 +816,14 @@ export type SanityFileAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
+  sha1hash: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  assetId: string;
   uploadId?: string;
-  path?: string;
-  url?: string;
+  path: string;
+  url: string;
   source?: SanityAssetSourceData;
 };
 
@@ -843,14 +845,14 @@ export type SanityImageAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
+  sha1hash: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  assetId: string;
   uploadId?: string;
-  path?: string;
-  url?: string;
+  path: string;
+  url: string;
   metadata?: SanityImageMetadata;
   source?: SanityAssetSourceData;
 };
@@ -926,8 +928,6 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint;
-
-export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: ../../packages/sanity/src/query.ts
 // Variable: queryImageType
@@ -2718,9 +2718,9 @@ export type QueryPlaylistBySlugResult = {
 } | null;
 
 // Source: ../../packages/sanity/src/query.ts
-// Variable: queryAuthorByGithubId
-// Query: *[_type == "author" && githubId == $id][0]
-export type QueryAuthorByGithubIdResult = {
+// Variable: queryAuthorByGoogleId
+// Query: *[_type == "author" && googleId == $id][0]
+export type QueryAuthorByGoogleIdResult = {
   _id: string;
   _type: "author";
   _createdAt: string;
@@ -2737,7 +2737,7 @@ export type QueryAuthorByGithubIdResult = {
     _type: "image";
   };
   bio?: string;
-  githubId?: number;
+  googleId?: string;
   username?: string;
   email?: string;
 } | null;
@@ -2849,7 +2849,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "category" && defined(slug.current)].slug.current\n': QueryCategoryPathsResult;
     '\n  *[_type == "category"] | order(title asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    "count": count(*[_type == "startup" && category._ref == ^._id])\n  }\n': QueryAllCategoriesWithCountResult;
     '\n  *[_type == "playlist" && slug.current == $slug][0] {\n    title,\n    select[]-> {\n      _id,\n      title,\n      "slug": slug.current,\n      description,\n      "category": category->title,\n      image {\n        \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n      },\n      author-> {\n        name,\n        image {\n          \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n        }\n      },\n      views,\n      upvotes\n    }\n  }\n': QueryPlaylistBySlugResult;
-    '\n  *[_type == "author" && githubId == $id][0]\n': QueryAuthorByGithubIdResult;
+    '\n  *[_type == "author" && googleId == $id][0]\n': QueryAuthorByGoogleIdResult;
     '\n  *[_type == "author" && _id == $id][0] {\n    _id,\n    name,\n    username,\n    email,\n    bio,\n    position,\n    image {\n      \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n    }\n  }\n': QueryAuthorByIdResult;
     '\n  *[_type == "comment" && author._ref == $id] | order(_createdAt desc) [0...10] {\n    _id,\n    _createdAt,\n    content,\n    startup-> {\n      _id,\n      title\n    }\n  }\n': QueryRecentActivityByAuthorResult;
     '\n  *[_type == "comment" && startup._ref == $id] | order(_createdAt desc) {\n    _id,\n    _createdAt,\n    content,\n    author-> {\n      _id,\n      name,\n      username,\n      image {\n        \n  "id": asset._ref,\n  "preview": asset->metadata.lqip,\n  "alt": coalesce(\n    alt,\n    asset->altText,\n    caption,\n    asset->originalFilename,\n    "untitled"\n  ),\n  hotspot {\n    x,\n    y\n  },\n  crop {\n    bottom,\n    left,\n    right,\n    top\n  }\n\n      }\n    }\n  }\n': QueryCommentsByStartupResult;

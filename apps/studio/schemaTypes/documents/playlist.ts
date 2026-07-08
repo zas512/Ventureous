@@ -1,11 +1,15 @@
-import { StackCompactIcon } from "@sanity/icons";
+import { Icon } from "@sanity/icons";
+import { createElement } from "react";
 import { defineField, defineType } from "sanity";
+
+const StackCompactSymbolIcon = () =>
+  createElement(Icon, { symbol: "stack-compact" });
 
 export const playlist = defineType({
   name: "playlist",
   title: "Playlist",
   type: "document",
-  icon: StackCompactIcon,
+  icon: StackCompactSymbolIcon,
   description: "A curated collection of startups (e.g., Editor's Picks)",
   fields: [
     defineField({
@@ -38,7 +42,7 @@ export const playlist = defineType({
     prepare: ({ title, count }) => ({
       title: title || "Untitled Playlist",
       subtitle: `${count?.length ?? 0} startups`,
-      media: StackCompactIcon,
+      media: StackCompactSymbolIcon,
     }),
   },
 });
