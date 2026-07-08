@@ -28,7 +28,7 @@
     "@workspace/logger": "file:../../packages/logger",
     "@workspace/sanity": "file:../../packages/sanity",
     "@workspace/ui": "file:../../packages/ui",
-    "babel-plugin-react-compiler": "19.1.0-rc.2",
+    "babel-plugin-react-compiler": "19.1.0-rc.3",
     "fuse.js": "^7.4.2",
     "lucide-react": "^1.23.0",
     "markdown-it": "^14.3.0",
