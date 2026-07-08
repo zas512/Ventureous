@@ -18,7 +18,7 @@
     "sanity-image": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^24.10.9",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.8",
     "@workspace/typescript-config": "file:../typescript-config",
     "typescript": "5.9.2"
