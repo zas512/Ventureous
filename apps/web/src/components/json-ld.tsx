@@ -5,6 +5,7 @@ import type {
   QuerySettingsDataResult,
 } from "@workspace/sanity/types";
 import { stegaClean } from "next-sanity";
+import Script from "next/script";
 import type {
   Answer,
   Article,
@@ -64,17 +65,23 @@ function extractPlainTextFromRichText(
 }
 
 // Utility function to safely render JSON-LD
-export function JsonLdScript<T>({ data, id }: { data: T; id: string }) {
+export function JsonLdScript<T>({
+  data,
+  id,
+}: Readonly<{ data: T; id: string }>) {
   return (
-    <script id={id} type="application/ld+json">
-      {JSON.stringify(data, null, 0)}
-    </script>
+    <Script
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data, null, 0) }}
+      id={id}
+      strategy="afterInteractive"
+      type="application/ld+json"
+    />
   );
 }
 
 // FAQ JSON-LD Component
 type FaqJsonLdProps = {
-  faqs: FlexibleFaq[];
+  readonly faqs: FlexibleFaq[];
 };
 
 export function FaqJsonLd({ faqs }: FaqJsonLdProps) {
@@ -126,8 +133,8 @@ function buildSafeImageUrl(image?: { id?: string | null }) {
 
 // Article JSON-LD Component
 type ArticleJsonLdProps = {
-  article: QueryBlogSlugPageDataResult;
-  settings?: QuerySettingsDataResult;
+  readonly article: QueryBlogSlugPageDataResult;
+  readonly settings?: QuerySettingsDataResult;
 };
 export function ArticleJsonLd({
   article: rawArticle,
@@ -193,7 +200,7 @@ export function ArticleJsonLd({
 
 // Organization JSON-LD Component
 type OrganizationJsonLdProps = {
-  settings: QuerySettingsDataResult;
+  readonly settings: QuerySettingsDataResult;
 };
 
 export function OrganizationJsonLd({ settings }: OrganizationJsonLdProps) {
@@ -234,7 +241,7 @@ export function OrganizationJsonLd({ settings }: OrganizationJsonLdProps) {
 
 // Website JSON-LD Component
 type WebSiteJsonLdProps = {
-  settings: QuerySettingsDataResult;
+  readonly settings: QuerySettingsDataResult;
 };
 
 export function WebSiteJsonLd({ settings }: WebSiteJsonLdProps) {
@@ -261,11 +268,8 @@ export function WebSiteJsonLd({ settings }: WebSiteJsonLdProps) {
 
 // Combined JSON-LD Component for pages with multiple structured data
 type CombinedJsonLdProps = {
-  settings?: QuerySettingsDataResult;
-  article?: QueryBlogSlugPageDataResult;
-  faqs?: FlexibleFaq[];
-  includeWebsite?: boolean;
-  includeOrganization?: boolean;
+  readonly includeWebsite?: boolean;
+  readonly includeOrganization?: boolean;
 };
 
 export async function CombinedJsonLd({

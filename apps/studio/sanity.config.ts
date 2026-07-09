@@ -18,6 +18,7 @@ import { getPresentationUrl } from "@/utils/helper";
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID ?? "";
 const dataset = process.env.SANITY_STUDIO_DATASET ?? "production";
 const title = process.env.SANITY_STUDIO_TITLE;
+const enableAssist = process.env.SANITY_STUDIO_ENABLE_ASSIST === "true";
 
 export default defineConfig({
   name: "default",
@@ -48,7 +49,7 @@ export default defineConfig({
     lucideIconPicker(),
     unsplashImageAsset(),
     media(),
-    assist(),
+    ...(enableAssist ? [assist()] : []),
     markdownSchema(),
   ],
   document: {

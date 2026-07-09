@@ -208,14 +208,24 @@ export const queryImageType = defineQuery(`
 `);
 
 export const queryHomePageData =
-  defineQuery(`*[_type == "homePage" && _id == "homePage"][0]{
-    _id,
-    _type,
-    title,
-    seoTitle,
-    seoDescription,
-    ${pageBuilderFragment}
-  }`);
+  defineQuery(`coalesce(
+    *[_type == "homePage" && _id == "homePage"][0]{
+      _id,
+      _type,
+      title,
+      seoTitle,
+      seoDescription,
+      ${pageBuilderFragment}
+    },
+    *[_type == "homePage"] | order(_updatedAt desc)[0]{
+      _id,
+      _type,
+      title,
+      seoTitle,
+      seoDescription,
+      ${pageBuilderFragment}
+    }
+  )`);
 
 export const querySlugPageData = defineQuery(`
   *[_type == "page" && defined(slug.current) && slug.current == $slug][0]{

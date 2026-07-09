@@ -38,6 +38,7 @@ export default async function RootLayout({
       <body
         className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}
       >
+        <CombinedJsonLd includeOrganization includeWebsite />
         <Providers>
           <Navbar navbarData={nav.navbarData} settingsData={nav.settingsData} />
           {children}
@@ -45,7 +46,6 @@ export default async function RootLayout({
             <FooterServer />
           </Suspense>
           <SanityLive />
-          <CombinedJsonLd includeOrganization includeWebsite />
           {(await draftMode()).isEnabled && (
             <>
               <PreviewBar />
