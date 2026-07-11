@@ -1,36 +1,27 @@
 {
   "name": "ventureous",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "build": "turbo run build",
-    "build:studio": "turbo run build --filter=studio",
-    "build:web": "turbo run build --filter=web",
-    "dev": "turbo run dev",
-    "dev:studio": "turbo run dev --filter=studio",
-    "dev:web": "turbo run dev --filter=web",
-    "lint": "turbo run lint",
-    "format": "turbo run format",
-    "format:check": "turbo run format:check",
-    "check-types": "turbo run check-types"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "@workspace/env": "file:packages/env"
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.2",
-    "@tailwindcss/typography": "^0.5.20",
-    "@workspace/typescript-config": "file:packages/typescript-config",
-    "turbo": "^2.10.4",
-    "typescript": "6.0.3",
-    "ultracite": "7.9.3"
-  },
-  "engines": {
-    "node": ">=22"
-  },
-  "packageManager": "npm@11.16.0"
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
 }
