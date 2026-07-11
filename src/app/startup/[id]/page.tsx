@@ -9,7 +9,7 @@ import {
   type StartupCardItem
 } from "@/components/startup/startup-card";
 import { StartupDetail } from "@/components/startup/startup-detail";
-import { getSEOMetadata } from "@/lib/seo";
+
 
 type StartupDetailData = ComponentProps<typeof StartupDetail>["startup"];
 type StartupCommentsData = ComponentProps<
@@ -197,19 +197,6 @@ function getRelatedStartups(startup: DummyStartup): StartupCardItem[] {
     (candidate) => candidate._id !== startup._id
   );
   return [...byCategory, ...fallback].slice(0, 6);
-}
-
-export async function generateMetadata({ params }: Props) {
-  const { id } = await params;
-  const startup = getStartupById(id);
-
-  return getSEOMetadata({
-    title: startup?.title ?? "Startup Pitch",
-    description: startup?.description ?? undefined,
-    slug: `/startup/${id}`,
-    contentId: startup?._id,
-    contentType: startup?._type
-  });
 }
 
 /**

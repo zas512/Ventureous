@@ -1,31 +1,26 @@
 import {
   GoogleGenerativeAI,
   type Schema,
-  SchemaType,
+  SchemaType
 } from "@google/generative-ai";
-import { env } from "@workspace/env/server";
-import { Logger } from "@workspace/logger";
 import { z } from "zod/v4";
 
-const logger = new Logger("gemini");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "qweqweqwe");
 
-const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
-
-/** Zod schema to validate Gemini's JSON response. */
 const geminiResponseSchema = z.object({
   clarity: z.object({
     score: z.number().int().min(0).max(100),
-    feedback: z.string().min(1).max(1000),
+    feedback: z.string().min(1).max(1000)
   }),
   marketPositioning: z.object({
     score: z.number().int().min(0).max(100),
-    feedback: z.string().min(1).max(1000),
+    feedback: z.string().min(1).max(1000)
   }),
   uniqueness: z.object({
     score: z.number().int().min(0).max(100),
-    feedback: z.string().min(1).max(1000),
+    feedback: z.string().min(1).max(1000)
   }),
-  suggestions: z.array(z.string().min(1).max(800)).min(2).max(3),
+  suggestions: z.array(z.string().min(1).max(800)).min(2).max(3)
 });
 
 /** The structured schema for Gemini's responseSchema config. */
@@ -36,32 +31,32 @@ const responseSchema: Schema = {
       type: SchemaType.OBJECT,
       properties: {
         score: { type: SchemaType.INTEGER },
-        feedback: { type: SchemaType.STRING },
+        feedback: { type: SchemaType.STRING }
       },
-      required: ["score", "feedback"],
+      required: ["score", "feedback"]
     },
     marketPositioning: {
       type: SchemaType.OBJECT,
       properties: {
         score: { type: SchemaType.INTEGER },
-        feedback: { type: SchemaType.STRING },
+        feedback: { type: SchemaType.STRING }
       },
-      required: ["score", "feedback"],
+      required: ["score", "feedback"]
     },
     uniqueness: {
       type: SchemaType.OBJECT,
       properties: {
         score: { type: SchemaType.INTEGER },
-        feedback: { type: SchemaType.STRING },
+        feedback: { type: SchemaType.STRING }
       },
-      required: ["score", "feedback"],
+      required: ["score", "feedback"]
     },
     suggestions: {
       type: SchemaType.ARRAY,
-      items: { type: SchemaType.STRING },
-    },
+      items: { type: SchemaType.STRING }
+    }
   },
-  required: ["clarity", "marketPositioning", "uniqueness", "suggestions"],
+  required: ["clarity", "marketPositioning", "uniqueness", "suggestions"]
 };
 
 const SYSTEM_PROMPT = `You are a startup pitch analyst. Evaluate the following startup pitch on three dimensions. Be honest, constructive, and specific.
@@ -104,9 +99,9 @@ export async function analyzePitch(
       model: "gemini-2.5-flash",
       generationConfig: {
         responseMimeType: "application/json",
-        responseSchema,
+        responseSchema
       },
-      systemInstruction: SYSTEM_PROMPT,
+      systemInstruction: SYSTEM_PROMPT
     });
 
     const truncatedPitch = input.pitch.slice(0, 5000);
@@ -141,10 +136,10 @@ ${truncatedPitch}`;
       marketPositioning: parsed.marketPositioning,
       uniqueness: parsed.uniqueness,
       suggestions: parsed.suggestions,
-      analyzedAt: new Date().toISOString(),
+      analyzedAt: new Date().toISOString()
     };
   } catch (error) {
-    logger.error("Pitch analysis failed", { error });
+    console.error("Pitch analysis failed", { error });
     return null;
   }
 }

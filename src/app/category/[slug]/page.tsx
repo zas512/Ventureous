@@ -17,8 +17,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
-import { getSEOMetadata } from "@/lib/seo";
 import { StartupCard } from "@/components/startup/startup-card";
 import type { StartupCardItem } from "@/components/startup/startup-card";
 
@@ -265,22 +263,6 @@ const CATEGORY_ACCENTS: Record<string, string> = {
   other: "text-pink-400 border-pink-500/30 bg-pink-500/10"
 };
 
-export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
-  const category = getCategoryBySlug(slug);
-
-  return getSEOMetadata({
-    title: category?.title ? `${category.title} Startups` : "Category",
-    description:
-      category?.description ??
-      `Browse startup pitches in the ${category?.title ?? slug} category.`,
-    slug: `/category/${slug}`
-  });
-}
-
-/**
- * Pre-generate category pages at build time.
- */
 export async function generateStaticParams() {
   return DUMMY_CATEGORIES.map((category) => ({ slug: category.slug }));
 }

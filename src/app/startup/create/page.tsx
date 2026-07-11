@@ -1,17 +1,6 @@
 import { Lightbulb, Rocket, Users, Zap } from "lucide-react";
-import type { Metadata } from "next";
 import { AuthGate } from "@/components/auth/auth-gate";
 import { StartupForm } from "@/components/startup/startup-form";
-import { getSEOMetadata } from "@/lib/seo";
-
-export function generateMetadata(): Metadata {
-  return getSEOMetadata({
-    title: "Submit Your Startup Pitch",
-    description:
-      "Share your startup idea with the community. Submit your pitch and get discovered by investors and fellow founders.",
-    slug: "/startup/create"
-  });
-}
 
 const STEPS = [
   {

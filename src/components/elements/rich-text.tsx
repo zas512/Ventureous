@@ -1,4 +1,4 @@
-import { cn, parseChildrenToSlug } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 import type { SanityRichTextProps } from "@/types";
@@ -30,39 +30,35 @@ function getBlockText(block: RichTextBlock): string {
 function renderTextBlock(block: RichTextBlock) {
   const text = getBlockText(block);
   const style = block.style ?? "normal";
-  const slug = parseChildrenToSlug(block.children ?? []);
 
   switch (style) {
     case "h2":
       return (
-        <h2
-          className="scroll-m-20 border-b pb-2 font-semibold text-xl sm:text-2xl md:text-3xl first:mt-0"
-          id={slug}
-        >
+        <h2 className="scroll-m-20 border-b pb-2 font-semibold text-xl sm:text-2xl md:text-3xl first:mt-0">
           {text}
         </h2>
       );
     case "h3":
       return (
-        <h3 className="scroll-m-20 font-semibold text-lg sm:text-xl md:text-2xl" id={slug}>
+        <h3 className="scroll-m-20 font-semibold text-lg sm:text-xl md:text-2xl">
           {text}
         </h3>
       );
     case "h4":
       return (
-        <h4 className="scroll-m-20 font-semibold text-base sm:text-lg md:text-xl" id={slug}>
+        <h4 className="scroll-m-20 font-semibold text-base sm:text-lg md:text-xl">
           {text}
         </h4>
       );
     case "h5":
       return (
-        <h5 className="scroll-m-20 font-semibold text-base md:text-lg" id={slug}>
+        <h5 className="scroll-m-20 font-semibold text-base md:text-lg">
           {text}
         </h5>
       );
     case "h6":
       return (
-        <h6 className="scroll-m-20 font-semibold text-sm md:text-base" id={slug}>
+        <h6 className="scroll-m-20 font-semibold text-sm md:text-base">
           {text}
         </h6>
       );
@@ -74,10 +70,10 @@ function renderTextBlock(block: RichTextBlock) {
 export function RichText<T extends SanityRichTextProps>({
   richText,
   className
-}: {
+}: Readonly<{
   richText?: T | null;
   className?: string;
-}) {
+}>) {
   if (!richText) {
     return null;
   }
@@ -128,7 +124,11 @@ export function RichText<T extends SanityRichTextProps>({
           );
         }
 
-        return <div key={block._key ?? `block-${index}`}>{renderTextBlock(block)}</div>;
+        return (
+          <div key={block._key ?? `block-${index}`}>
+            {renderTextBlock(block)}
+          </div>
+        );
       })}
     </div>
   );

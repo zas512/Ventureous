@@ -9,7 +9,11 @@ const LOGO_URL =
 
 type LogoProps = {
   src?: Maybe<string>;
-  image?: Maybe<{ id?: string | null; url?: string | null; alt?: string | null }>;
+  image?: Maybe<{
+    id?: string | null;
+    url?: string | null;
+    alt?: string | null;
+  }>;
   alt?: Maybe<string>;
   width?: number;
   height?: number;
@@ -22,14 +26,14 @@ export function Logo({
   image,
   width = 170,
   height = 40,
-  priority = true,
-}: LogoProps) {
+  priority = true
+}: Readonly<LogoProps>) {
   return (
     <Link className="" href="/">
       {image ? (
         <SanityImage
           alt={alt ?? "logo"}
-          className="w-[170px] dark:invert"
+          className="w-42.5 dark:invert"
           // width={width}
           // height={height}
           decoding="sync"
@@ -39,7 +43,7 @@ export function Logo({
       ) : (
         <Image
           alt={alt ?? "logo"}
-          className="h-[40px] w-[170px] dark:invert"
+          className="h-10 w-42.5 dark:invert"
           decoding="sync"
           height={height}
           loading="eager"

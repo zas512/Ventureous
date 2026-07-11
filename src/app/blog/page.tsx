@@ -1,5 +1,5 @@
 import { BlogPageContent } from "@/components/blog-page-content";
-import { getSEOMetadata } from "@/lib/seo";
+
 import {
   calculatePaginationMetadata,
   getBlogPaginationStartEnd
@@ -105,14 +105,6 @@ const DUMMY_BLOGS = [
     image: null
   }
 ];
-
-export async function generateMetadata() {
-  return getSEOMetadata({
-    title: BLOG_INDEX_DATA.title,
-    description: BLOG_INDEX_DATA.description,
-    slug: "/blog"
-  });
-}
 
 type BlogPageProps = {
   searchParams: Promise<{

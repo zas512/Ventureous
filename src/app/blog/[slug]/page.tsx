@@ -4,8 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { RichText } from "@/components/elements/rich-text";
 import { TableOfContent } from "@/components/elements/table-of-content";
-import { ArticleJsonLd } from "@/components/json-ld";
-import { getSEOMetadata } from "@/lib/seo";
+
+import type { SanityRichTextProps } from "@/types";
 
 type DummyBlogArticle = {
   _id: string;
@@ -15,7 +15,7 @@ type DummyBlogArticle = {
   description: string;
   publishedAt: string;
   image?: string | null;
-  richText: unknown[];
+  richText: SanityRichTextProps;
 };
 
 const DUMMY_BLOG_ARTICLES: DummyBlogArticle[] = [
@@ -131,25 +131,6 @@ function getBlogArticleBySlug(slug: string): DummyBlogArticle | undefined {
   return DUMMY_BLOG_ARTICLES.find((article) => article.slug === slug);
 }
 
-export async function generateMetadata({
-  params
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const data = getBlogArticleBySlug(slug);
-  const slugString = `/blog/${slug}`;
-
-  return getSEOMetadata({
-    title: data?.title ?? "Blog",
-    description: data?.description,
-    slug: slugString,
-    contentId: data?._id,
-    contentType: data?._type,
-    pageType: "article"
-  });
-}
-
 export async function generateStaticParams() {
   return DUMMY_BLOG_ARTICLES.map((article) => ({ slug: article.slug }));
 }
@@ -180,8 +161,6 @@ export default async function BlogSlugPage({
 
   return (
     <main className="min-h-screen pb-24">
-      <ArticleJsonLd article={data} />
-
       <div className="mx-auto max-w-6xl px-6 pt-28">
         {/* Back link */}
         <Link

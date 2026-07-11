@@ -1,20 +1,9 @@
-import type { Metadata } from "next";
 import { Rocket } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Tag } from "@/components/shared/tag";
 import { StartupSearch } from "@/components/startup/startup-search";
 import type { StartupCardItem } from "@/components/startup/startup-card";
-import { getSEOMetadata } from "@/lib/seo";
-
-export function generateMetadata(): Metadata {
-  return getSEOMetadata({
-    title: "All Startup Pitches",
-    description:
-      "Browse innovative startup pitches from founders across every industry. Filter by category or search for something specific.",
-    slug: "/startup"
-  });
-}
 
 type Props = {
   searchParams: Promise<{ sort?: string; query?: string; category?: string }>;

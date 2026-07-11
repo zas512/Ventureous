@@ -16,7 +16,7 @@ type BlogSearchResultsProps = {
 
 function SearchResultsHeader({
   query,
-  count,
+  count
 }: {
   query: string;
   count: number;
@@ -48,7 +48,7 @@ function EmptySearchState({ query }: { query: string }) {
   );
 }
 
-function ErrorState({ query }: { query: string }) {
+function ErrorState({ query }: Readonly<{ query: string }>) {
   return (
     <div className="py-12 text-center">
       <div className="mx-auto max-w-md">
@@ -56,8 +56,8 @@ function ErrorState({ query }: { query: string }) {
           Search failed
         </h3>
         <p className="mb-4 text-muted-foreground">
-          We encountered an error while searching for "{query}". Please try
-          again.
+          We encountered an error while searching for &quot;{query}&quot;.
+          Please try again.
         </p>
         <div className="text-muted-foreground text-sm">
           <p>If the problem persists:</p>
@@ -78,7 +78,7 @@ const LOADING_SKELETONS = [
   "skeleton-3",
   "skeleton-4",
   "skeleton-5",
-  "skeleton-6",
+  "skeleton-6"
 ] as const;
 
 function LoadingState() {
@@ -113,7 +113,7 @@ export function BlogSearchResults({
   isSearching,
   hasQuery,
   searchQuery,
-  error,
+  error
 }: BlogSearchResultsProps) {
   if (!hasQuery) {
     return null;
