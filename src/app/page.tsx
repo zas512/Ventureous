@@ -1,65 +1,77 @@
-import { sanityFetch } from "@workspace/sanity/live";
-import { queryHomePageData } from "@workspace/sanity/query";
-import { PageBuilder } from "@/components/pagebuilder";
-import { getSEOMetadata } from "@/lib/seo";
-import type { PageBuilderBlock } from "@/types";
+import { Hero } from "@/components/homepage/hero";
+import { Integrations } from "@/components/homepage/integrations";
+import { TopPitches } from "@/components/homepage/top-pitches";
 
-type HomePageData = {
-  _id: string;
-  _type: string;
-  seoTitle?: string;
-  seoDescription?: string;
-  pageBuilder?: PageBuilderBlock[];
+const HERO_DATA = {
+  badge: "Now in Demo Mode",
+  title: "Launch Brilliant Startup Ideas Faster",
+  subtitle:
+    "A fully static home experience with curated sample content, animations, and polished UI.",
+  buttons: [
+    {
+      _key: "hero-btn-1",
+      text: "Explore Startups",
+      href: "/startup",
+      variant: "default"
+    },
+    {
+      _key: "hero-btn-2",
+      text: "Read the Blog",
+      href: "/blog",
+      variant: "outline"
+    }
+  ]
 };
 
-async function fetchHomePageData() {
-  return await sanityFetch({ query: queryHomePageData });
-}
+const INTEGRATIONS_DATA = {
+  eyebrow: "Integrations",
+  title: "Connected To Your Workflow",
+  subtitle:
+    "Plug into the tools your team already uses with a clean, visual-first experience.",
+  integrations: [
+    {
+      _key: "int-1",
+      name: "GitHub",
+      description: "Sync repos, issues, and release planning in one place."
+    },
+    {
+      _key: "int-2",
+      name: "Notion",
+      description: "Turn notes and docs into structured product briefs."
+    },
+    {
+      _key: "int-3",
+      name: "Figma",
+      description:
+        "Attach designs directly to startup ideas and feedback loops."
+    },
+    {
+      _key: "int-4",
+      name: "Slack",
+      description: "Get instant updates when your top pitches start trending."
+    },
+    {
+      _key: "int-5",
+      name: "Linear",
+      description: "Move validated ideas to actionable product roadmaps."
+    },
+    {
+      _key: "int-6",
+      name: "Vercel",
+      description: "Deploy prototypes quickly with preview links for teammates."
+    }
+  ]
+};
 
-export async function generateMetadata() {
-  const { data } = await fetchHomePageData();
-  const homeData = (data ?? null) as HomePageData | null;
-
-  return getSEOMetadata({
-    title: homeData?.seoTitle ?? undefined,
-    description: homeData?.seoDescription ?? undefined,
-    slug: "/",
-    contentId: homeData?._id,
-    contentType: homeData?._type,
-  });
-}
-
-export default async function Page() {
-  const { data } = await fetchHomePageData();
-  const homeData = (data ?? null) as HomePageData | null;
-
-  if (!homeData) {
-    return (
-      <main className="container py-16">
-        <div className="mx-auto max-w-2xl rounded-2xl border border-neutral-200 bg-neutral-50 p-6 text-neutral-900 dark:border-white/10 dark:bg-white/5 dark:text-white">
-          <h1 className="text-xl font-semibold">Home page content is not set up yet.</h1>
-          <p className="mt-2 text-sm text-neutral-600 dark:text-white/70">
-            Open Sanity Studio and create or publish a Home Page document, then
-            refresh this page.
-          </p>
-          <a
-            className="mt-4 inline-flex rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-white/90"
-            href="http://localhost:3333"
-            rel="noreferrer"
-            target="_blank"
-          >
-            Open Sanity Studio
-          </a>
-        </div>
-      </main>
-    );
-  }
-
+export default function Page() {
   return (
-    <PageBuilder
-      id={homeData._id}
-      pageBuilder={homeData.pageBuilder ?? []}
-      type={homeData._type}
-    />
+    <main className="flex flex-col">
+      <Hero {...HERO_DATA} />
+      <TopPitches
+        eyebrow="Trending This Week"
+        title="Top Pitches on the Rise"
+      />
+      <Integrations {...INTEGRATIONS_DATA} />
+    </main>
   );
 }

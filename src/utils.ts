@@ -1,16 +1,10 @@
-import { env } from "@workspace/env/client";
-import type { PortableTextBlock } from "next-sanity";
-import slugify from "slugify";
-
 export const getBaseUrl = () => {
-  if (env.NEXT_PUBLIC_VERCEL_ENV === "production") {
-    return env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL;
+  if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
+    return process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL;
   }
-
-  if (env.NEXT_PUBLIC_VERCEL_ENV === "preview") {
-    return env.NEXT_PUBLIC_VERCEL_URL;
+  if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview") {
+    return process.env.NEXT_PUBLIC_VERCEL_URL;
   }
-
   return "http://localhost:3000";
 };
 
@@ -21,7 +15,8 @@ export const isValidUrl = (url: string) => {
   try {
     new URL(url);
     return true;
-  } catch (_e) {
+  } catch (e) {
+    console.error(`Invalid URL: ${url}`, e);
     return isRelativeUrl(url);
   }
 };
@@ -45,29 +40,9 @@ export async function handleErrors<T>(
   } catch (err) {
     return [
       undefined,
-      err instanceof Error ? err.message : JSON.stringify(err),
+      err instanceof Error ? err.message : JSON.stringify(err)
     ];
   }
-}
-
-export function convertToSlug(
-  text?: string,
-  { fallback }: { fallback?: string } = { fallback: "top-level" }
-) {
-  if (!text) {
-    return fallback;
-  }
-  return slugify(text.trim(), {
-    lower: true,
-    remove: /[^a-zA-Z0-9 ]/g,
-  });
-}
-
-export function parseChildrenToSlug(children: PortableTextBlock["children"]) {
-  if (!children) {
-    return "";
-  }
-  return convertToSlug(children.map((child) => child.text).join(""));
 }
 
 const BLOG_ITEMS_PER_PAGE = 10;
@@ -105,6 +80,6 @@ export function calculatePaginationMetadata(
     totalItems,
     itemsPerPage,
     hasNextPage,
-    hasPreviousPage,
+    hasPreviousPage
   };
 }
