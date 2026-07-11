@@ -1,4 +1,3 @@
-import { Logger } from "@workspace/logger";
 import { client } from "@workspace/sanity/client";
 import { sanityFetch } from "@workspace/sanity/live";
 import { querySlugPageData, querySlugPagePaths } from "@workspace/sanity/query";

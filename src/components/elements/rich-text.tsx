@@ -1,5 +1,4 @@
-import { Logger } from "@workspace/logger";
-import { cn } from "@workspace/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { PortableText, type PortableTextReactComponents } from "next-sanity";
 
@@ -58,11 +57,14 @@ const components: Partial<PortableTextReactComponents> = {
     h6: ({ children, value }) => {
       const slug = parseChildrenToSlug(value.children);
       return (
-        <h6 className="scroll-m-20 font-semibold text-sm md:text-base" id={slug}>
+        <h6
+          className="scroll-m-20 font-semibold text-sm md:text-base"
+          id={slug}
+        >
           {children}
         </h6>
       );
-    },
+    }
   },
   marks: {
     code: ({ children }) => (
@@ -89,7 +91,7 @@ const components: Partial<PortableTextReactComponents> = {
           {children}
         </Link>
       );
-    },
+    }
   },
   types: {
     image: ({ value }) => {
@@ -111,14 +113,14 @@ const components: Partial<PortableTextReactComponents> = {
           )}
         </figure>
       );
-    },
+    }
   },
-  hardBreak: () => <br />,
+  hardBreak: () => <br />
 };
 
 export function RichText<T extends SanityRichTextProps>({
   richText,
-  className,
+  className
 }: {
   richText?: T | null;
   className?: string;

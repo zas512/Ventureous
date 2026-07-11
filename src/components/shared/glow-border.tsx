@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@workspace/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import type { CSSProperties, ReactNode } from "react";
 
 interface GlowBorderProps {

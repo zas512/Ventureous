@@ -1,10 +1,16 @@
 "use client";
-
-import { IntegrationsColumn } from "@/components/shared/integrations-column";
+import {
+  IntegrationsColumn,
+  type IntegrationItem
+} from "@/components/shared/integrations-column";
 import { Tag } from "@/components/shared/tag";
-import type { PagebuilderType } from "@/types";
 
-type IntegrationsSectionProps = PagebuilderType<"integrationsSection">;
+type IntegrationsSectionProps = Readonly<{
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  integrations?: IntegrationItem[];
+}>;
 
 export function Integrations(props: IntegrationsSectionProps) {
   const { eyebrow, title, subtitle, integrations } = props;
@@ -26,7 +32,7 @@ export function Integrations(props: IntegrationsSectionProps) {
             )}
           </div>
           <div>
-            <div className="mt-8 grid h-96 gap-4 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] md:grid-cols-2 lg:mt-0 lg:h-[800px]">
+            <div className="mt-8 grid h-96 gap-4 overflow-hidden mask-[linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] md:grid-cols-2 lg:mt-0 lg:h-200">
               {items.length > 0 && (
                 <>
                   <IntegrationsColumn integrations={items} />

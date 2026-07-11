@@ -1,4 +1,4 @@
-import { cn } from "@workspace/ui/lib/utils";
+import { cn } from "@/lib/utils";
 
 /**
  * Cursor tooltip decoration for hero section.

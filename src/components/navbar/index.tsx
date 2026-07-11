@@ -1,7 +1,7 @@
 "use client";
 
 import { env } from "@workspace/env/client";
-import { cn } from "@workspace/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 import type { NavigationData } from "@/types";

@@ -1,4 +1,4 @@
-import { cn } from "@workspace/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 import avatar1 from "@/../public/images/avatar-ashwin-santiago.jpg";
