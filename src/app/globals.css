@@ -150,11 +150,11 @@ img {
 }
 
 .hero-cursor {
-  cursor: url("/images/cursor-you-dark.svg"), auto;
+  cursor: url("/cursor-you-dark.svg"), auto;
 }
 
 .dark .hero-cursor {
-  cursor: url("/images/cursor-you.svg"), auto;
+  cursor: url("/cursor-you.svg"), auto;
 }
 
 @keyframes shimmer {

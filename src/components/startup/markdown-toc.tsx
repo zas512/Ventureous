@@ -87,11 +87,6 @@ function useActiveSections(headings: Heading[]) {
   return activeSlugs;
 }
 
-/**
- * Table of contents for markdown-rendered content.
- * Expects headings extracted from the markdown string and
- * matching IDs on the rendered heading elements.
- */
 export function MarkdownToc({ headings, className }: MarkdownTocProps) {
   const activeSlugs = useActiveSections(headings);
   const itemRefs = useRef<Map<string, HTMLLIElement>>(new Map());
@@ -145,7 +140,7 @@ export function MarkdownToc({ headings, className }: MarkdownTocProps) {
             height: indicator.height,
             opacity: activeSlugs.size > 0 ? 1 : 0,
           }}
-          className="absolute -left-px w-[2px] bg-pink-500"
+          className="absolute -left-px w-0.5 bg-pink-500"
           initial={false}
           transition={SPRING_TRANSITION}
         />

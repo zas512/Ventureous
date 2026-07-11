@@ -1,12 +1,11 @@
 "use client";
-
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { SignInModal } from "./sign-in-modal";
 
 type AuthGateProps = {
-  readonly children: React.ReactNode;
+  readonly children: ReactNode;
 };
 
 /**

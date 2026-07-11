@@ -8,7 +8,7 @@ export function ShareButton() {
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(window.location.href).then((text) => {console.log(text)});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }

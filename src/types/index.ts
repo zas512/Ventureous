@@ -100,18 +100,3 @@ export type SanityRichTextBlock = {
 };
 
 export type SanityRichTextProps = SanityRichTextBlock[];
-
-export type PageBuilderBlockTypes =
-  | "faqAccordion"
-  | "heroSection"
-  | "logoTickerSection"
-  | "topPitchesSection"
-  | "featureCardsIcon"
-  | "integrationsSection"
-  | "faqSection";
-
-export type PageBuilderBlock = {
-  _key: string;
-  _type: PageBuilderBlockTypes | string;
-  [key: string]: unknown;
-};

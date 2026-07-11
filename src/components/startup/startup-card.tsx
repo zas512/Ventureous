@@ -1,4 +1,3 @@
-import { Skeleton } from "@/components/skeleton";
 import { Eye, Flame } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -178,25 +177,5 @@ export function StartupCard({ post }: Readonly<{ post: StartupCardItem }>) {
         </div>
       </Link>
     </article>
-  );
-}
-
-/** Skeleton placeholder while startup cards are loading. */
-export function StartupCardSkeleton() {
-  return (
-    <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-neutral-200/80 dark:bg-neutral-900 dark:ring-white/10">
-      <Skeleton className="aspect-video w-full rounded-none bg-neutral-100 dark:bg-white/5" />
-      <div className="p-4">
-        <Skeleton className="h-4 w-full bg-neutral-100 dark:bg-white/5" />
-        <Skeleton className="mt-1.5 h-4 w-3/4 bg-neutral-100 dark:bg-white/5" />
-        <div className="mt-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Skeleton className="size-6 rounded-full bg-neutral-100 dark:bg-white/5" />
-            <Skeleton className="h-3 w-16 bg-neutral-100 dark:bg-white/5" />
-          </div>
-          <Skeleton className="h-3 w-16 bg-neutral-100 dark:bg-white/5" />
-        </div>
-      </div>
-    </div>
   );
 }

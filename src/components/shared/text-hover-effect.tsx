@@ -1,7 +1,6 @@
 "use client";
-
 import { motion, useMotionValue, useSpring } from "motion/react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, MouseEvent } from "react";
 
 const TEXT_STYLE = {
   fontFamily: "helvetica, Arial, sans-serif",
@@ -74,7 +73,7 @@ export function TextHoverEffect({
     };
   }, [springX, springY, isMobile]);
 
-  const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+  const handleMouseMove = (e: MouseEvent<SVGSVGElement>) => {
     if (!svgRef.current || isMobile) {
       return;
     }

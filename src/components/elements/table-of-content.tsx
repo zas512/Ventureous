@@ -1,5 +1,4 @@
 "use client";
-
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import Link from "next/link";
@@ -9,12 +8,10 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState,
+  useState
 } from "react";
 
 import type { SanityRichTextBlock, SanityRichTextProps } from "@/types";
-import { convertToSlug } from "@/lib/utils";
-
 // ==========================================================================
 // TYPES
 // ==========================================================================
@@ -58,7 +55,7 @@ const HEADING_LEVELS: Record<HeadingStyle, number> = {
   h3: 3,
   h4: 4,
   h5: 5,
-  h6: 6,
+  h6: 6
 } as const;
 
 const DEFAULT_MAX_DEPTH = 6;
@@ -68,7 +65,7 @@ const SPRING_TRANSITION = {
   type: "spring" as const,
   stiffness: 350,
   damping: 30,
-  mass: 0.8,
+  mass: 0.8
 };
 
 // ==========================================================================
@@ -110,14 +107,9 @@ function isHeadingBlock(block: unknown): block is HeadingBlock {
   );
 }
 
-// ==========================================================================
-// PROCESSING
-// ==========================================================================
-
-/** Uses the same slug logic as rich-text.tsx (parseChildrenToSlug -> convertToSlug). */
 function childrenToSlug(children: readonly SanityTextChild[]): string {
   const raw = children.map((child) => child.text ?? "").join("");
-  return convertToSlug(raw) ?? "";
+  return raw ?? "";
 }
 
 function extractText(children: readonly SanityTextChild[]): string {
@@ -129,7 +121,7 @@ function extractText(children: readonly SanityTextChild[]): string {
 
 function processHeadings(
   richText: SanityRichTextProps,
-  maxDepth: number,
+  maxDepth: number
 ): ProcessedHeading[] {
   if (!Array.isArray(richText) || richText.length === 0) return [];
 
@@ -152,7 +144,7 @@ function processHeadings(
         href: `#${slug}`,
         level,
         style: block.style,
-        _key: block._key,
+        _key: block._key
       };
     })
     .filter((h): h is ProcessedHeading => h !== null);
@@ -201,7 +193,7 @@ function useActiveSections(headings: ProcessedHeading[]) {
               window.scrollY -
               el.offsetTop +
               sectionTop,
-            sectionTop + vh,
+            sectionTop + vh
           );
         }
 
@@ -238,11 +230,11 @@ function useActiveSections(headings: ProcessedHeading[]) {
 export const TableOfContent: FC<TableOfContentProps> = ({
   richText,
   className,
-  maxDepth = DEFAULT_MAX_DEPTH,
+  maxDepth = DEFAULT_MAX_DEPTH
 }) => {
   const headings = useMemo(
     () => (richText ? processHeadings(richText, maxDepth) : []),
-    [richText, maxDepth],
+    [richText, maxDepth]
   );
 
   const activeSlugs = useActiveSections(headings);
@@ -258,7 +250,7 @@ export const TableOfContent: FC<TableOfContentProps> = ({
         itemRefs.current.delete(slug);
       }
     },
-    [],
+    []
   );
 
   useEffect(() => {
@@ -296,7 +288,7 @@ export const TableOfContent: FC<TableOfContentProps> = ({
           animate={{
             top: indicator.top,
             height: indicator.height,
-            opacity: activeSlugs.size > 0 ? 1 : 0,
+            opacity: activeSlugs.size > 0 ? 1 : 0
           }}
           className="absolute -left-px w-[2px] bg-pink-500"
           initial={false}
@@ -314,7 +306,7 @@ export const TableOfContent: FC<TableOfContentProps> = ({
                     "block px-6 py-1.5 text-sm leading-snug transition-colors duration-200",
                     isActive
                       ? "font-medium text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                   href={heading.href}
                   onClick={(e) => {

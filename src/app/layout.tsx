@@ -1,10 +1,9 @@
 import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import { FooterServer, FooterSkeleton } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { Providers } from "@/components/providers";
-import { ServiceWorkerRegister } from "@/components/sw-register";
 import { getNavigationData } from "@/lib/navigation";
 
 const fontSans = Geist({
@@ -20,7 +19,7 @@ const fontMono = Geist_Mono({
 export default async function RootLayout({
   children
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   const nav = await getNavigationData();
   return (
@@ -34,7 +33,6 @@ export default async function RootLayout({
           <Suspense fallback={<FooterSkeleton />}>
             <FooterServer />
           </Suspense>
-          <ServiceWorkerRegister />
         </Providers>
       </body>
     </html>

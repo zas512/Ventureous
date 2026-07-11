@@ -1,6 +1,5 @@
 "use client";
-
-import { memo } from "react";
+import { memo, ImgHTMLAttributes } from "react";
 
 type ImageLike = {
   id?: string | null;
@@ -12,7 +11,7 @@ type ImageLike = {
   } | null;
 };
 
-type SanityImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+type SanityImageProps = ImgHTMLAttributes<HTMLImageElement> & {
   image?: ImageLike | null;
 };
 

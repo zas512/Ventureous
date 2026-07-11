@@ -21,7 +21,6 @@ import {
   EditorCommandList,
   EditorContent,
   EditorRoot,
-  handleCommandNavigation,
   type JSONContent,
   renderItems,
   type SuggestionItem,
@@ -196,9 +195,6 @@ export function PitchEditor({ onChange }: PitchEditorProps) {
           onChange(editor.getHTML());
         }}
         editorProps={{
-          handleDOMEvents: {
-            keydown: (_view, event) => handleCommandNavigation(event),
-          },
           attributes: {
             class:
               "prose dark:prose-invert prose-headings:font-semibold prose-p:text-neutral-600 dark:prose-p:text-white/60 focus:outline-none max-w-full min-h-64 px-8 py-6",

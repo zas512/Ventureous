@@ -1,16 +1,14 @@
 "use client";
-
 import { Button } from "@/components/button";
 import {
   Camera,
   Check,
   ExternalLink,
-  Github,
   Loader2,
   Pencil,
   X,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, ChangeEvent, SubmitEvent } from "react";
 
 interface AuthorData {
   name: string | null;
@@ -37,7 +35,7 @@ export function UserProfileHero({ author, isOwner }: UserProfileHeroProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) {
       if (imagePreview) URL.revokeObjectURL(imagePreview);
@@ -69,7 +67,7 @@ export function UserProfileHero({ author, isOwner }: UserProfileHeroProps) {
     }
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
     setIsPending(true);
@@ -242,7 +240,6 @@ export function UserProfileHero({ author, isOwner }: UserProfileHeroProps) {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-lg bg-neutral-900 px-3.5 py-1.5 text-xs font-medium text-white transition hover:bg-neutral-800 dark:bg-white/10 dark:hover:bg-white/15"
                   >
-                    <Github className="size-3.5" />
                     GitHub
                     <ExternalLink className="size-3" />
                   </a>
@@ -266,7 +263,7 @@ export function UserProfileHero({ author, isOwner }: UserProfileHeroProps) {
   );
 
   const wrapper = (
-    <div className="relative overflow-hidden bg-linear-to-br from-pink-500/10 via-purple-500/5 to-transparent dark:from-pink-500/5 dark:via-purple-500/[0.02]">
+    <div className="relative overflow-hidden bg-linear-to-br from-pink-500/10 via-purple-500/5 to-transparent dark:from-pink-500/5 dark:via-purple-500/2">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(236,72,153,0.08),transparent_70%)] dark:bg-[radial-gradient(ellipse_at_top_right,rgba(236,72,153,0.04),transparent_70%)]" />
       {content}
     </div>

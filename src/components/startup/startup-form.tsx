@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { Label } from "@/components/label";
@@ -19,7 +18,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, type ReactNode, ComponentType, ChangeEvent, FormHTMLAttributes } from "react";
 
 import { PitchEditor } from "./pitch-editor";
 
@@ -32,11 +31,11 @@ function FormField({
   children,
   htmlFor,
 }: {
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
   label: string;
   hint?: string;
   error?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   htmlFor: string;
 }) {
   return (
@@ -81,7 +80,7 @@ function StepIndicator({
           key={i}
           className={`h-1.5 rounded-full transition-all duration-300 ${
             i === currentStep
-              ? "w-8 bg-gradient-to-r from-pink-500 to-purple-600"
+              ? "w-8 bg-linear-to-r from-pink-500 to-purple-600"
               : i < currentStep
                 ? "w-4 bg-pink-500/40"
                 : "w-4 bg-neutral-200 dark:bg-white/10"
@@ -98,11 +97,6 @@ interface Category {
   slug: string | null;
 }
 
-/**
- * Multi-step form for submitting a new startup pitch.
- * Step 1: Basic info (title, description, category, image).
- * Step 2: Rich pitch editor (Novel/Tiptap).
- */
 export function StartupForm({ categories }: { categories: Category[] }) {
   const router = useRouter();
   const [step, setStep] = useState(0);
@@ -115,7 +109,7 @@ export function StartupForm({ categories }: { categories: Category[] }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file) {
         setImagePreview(null);
@@ -175,26 +169,8 @@ export function StartupForm({ categories }: { categories: Category[] }) {
     }
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-
-    if (pitchHtml.length < 20) {
-      setError("Your pitch needs more content — at least a few sentences.");
-      return;
-    }
-
-    setIsPending(true);
-
-    await Promise.resolve();
-
-    setIsPending(false);
-
-    router.push("/startup");
-  }
-
   return (
-    <form ref={formRef} onSubmit={handleSubmit}>
+    <form ref={formRef}>
       {/* Step indicator */}
       <div className="mb-8">
         <StepIndicator currentStep={step} totalSteps={2} />
@@ -250,7 +226,7 @@ export function StartupForm({ categories }: { categories: Category[] }) {
                 name="category"
                 required
                 defaultValue=""
-                className="flex h-12 w-full appearance-none rounded-md border border-input bg-transparent bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23999%22%20stroke-width%3D%222%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.75rem_center] bg-no-repeat px-3 pr-10 text-base shadow-xs outline-none transition focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 dark:bg-input/30"
+                className="flex h-12 w-full appearance-none rounded-md border border-input bg-transparent bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23999%22%20stroke-width%3D%222%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-size-[1.25rem] bg-position-[right_0.75rem_center] bg-no-repeat px-3 pr-10 text-base shadow-xs outline-none transition focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 dark:bg-input/30"
               >
                 <option value="" disabled>
                   Select a category

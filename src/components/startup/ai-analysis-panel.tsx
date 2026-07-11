@@ -1,9 +1,7 @@
 "use client";
-
 import { ChevronDown, Sparkles } from "lucide-react";
 import { AnimatePresence, animate, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef, useState,type ReactNode } from "react";
 import { GlowBorder } from "../shared/glow-border";
 
 interface AiAnalysis {
@@ -180,7 +178,7 @@ function ScoreGauge({
   size?: number;
   strokeWidth?: number;
   delay?: number;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }) {
   const weight = scoreWeight(score);
   const radius = (size - strokeWidth) / 2;
