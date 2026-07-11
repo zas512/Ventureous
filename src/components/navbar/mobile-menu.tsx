@@ -1,12 +1,11 @@
 "use client";
-
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
-} from "@workspace/ui/components/accordion";
-import { Button } from "@workspace/ui/components/button";
+  AccordionTrigger
+} from "@/components/accordion";
+import { Button } from "@/components/button";
 import {
   Sheet,
   SheetClose,
@@ -14,8 +13,8 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
-} from "@workspace/ui/components/sheet";
+  SheetTrigger
+} from "@/components/sheet";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";

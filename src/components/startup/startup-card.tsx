@@ -1,39 +1,71 @@
-import type {
-  QueryPlaylistBySlugResult,
-  QueryStartupsByAuthorResult,
-  QueryStartupsByCategoryResult,
-  QueryStartupsByUpvotesResult,
-  QueryStartupsByViewsResult,
-  QueryStartupsResult,
-  QueryTopStartupsResult,
-} from "@workspace/sanity/types";
-import { Skeleton } from "@workspace/ui/components/skeleton";
+import { Skeleton } from "@/components/skeleton";
 import { Eye, Flame } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
-import { SanityImage } from "@/components/elements/sanity-image";
+export type StartupCardAuthor = {
+  name?: string | null;
+  image?: unknown;
+};
 
-/** Single startup item from any of the list queries. */
-export type StartupCardItem =
-  | QueryStartupsResult[number]
-  | QueryStartupsByAuthorResult[number]
-  | QueryStartupsByCategoryResult[number]
-  | QueryStartupsByUpvotesResult[number]
-  | QueryStartupsByViewsResult[number]
-  | QueryTopStartupsResult[number]
-  | NonNullable<NonNullable<QueryPlaylistBySlugResult>["select"]>[number];
+/** Generic startup card item that works with local dummy data and legacy page consumers. */
+export type StartupCardItem = {
+  _id: string;
+  title: string;
+  category?: string | null;
+  description?: string | null;
+  image?: unknown;
+  author?: StartupCardAuthor | null;
+  views?: number | null;
+  upvotes?: number | null;
+  _createdAt?: string | null;
+};
+
+function resolveImageSource(image: unknown): string | null {
+  if (!image) {
+    return null;
+  }
+
+  if (typeof image === "string") {
+    return image;
+  }
+
+  if (typeof image === "object") {
+    const maybeObject = image as {
+      url?: unknown;
+      src?: unknown;
+      asset?: { url?: unknown } | null;
+    };
+
+    if (typeof maybeObject.url === "string") {
+      return maybeObject.url;
+    }
+
+    if (typeof maybeObject.src === "string") {
+      return maybeObject.src;
+    }
+
+    if (typeof maybeObject.asset?.url === "string") {
+      return maybeObject.asset.url;
+    }
+  }
+
+  return null;
+}
 
 /**
  * Card for a single startup pitch.
  * Cover image with gradient overlay, category badge, stats, and author row.
  */
-export function StartupCard({ post }: { post: StartupCardItem }) {
+export function StartupCard({ post }: Readonly<{ post: StartupCardItem }>) {
   const { _id, title, category, description, image } = post;
 
-  const createdAt = "_createdAt" in post ? (post._createdAt as string) : null;
-  const author = "author" in post ? post.author : null;
-  const views = "views" in post ? (post.views as number | null) : null;
-  const upvotes = "upvotes" in post ? (post.upvotes as number | null) : null;
+  const createdAt = post._createdAt ?? null;
+  const author = post.author ?? null;
+  const views = post.views ?? null;
+  const upvotes = post.upvotes ?? null;
+  const coverImage = resolveImageSource(image);
+  const authorImage = resolveImageSource(author?.image);
 
   const formattedDate = createdAt
     ? new Date(createdAt).toLocaleDateString("en-US", {
@@ -52,14 +84,20 @@ export function StartupCard({ post }: { post: StartupCardItem }) {
       >
         {/* Cover image */}
         <div className="relative aspect-video w-full overflow-hidden">
-          <SanityImage
-            image={image}
-            className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-            alt={title}
-          />
+          {coverImage ? (
+            <Image
+              src={coverImage}
+              alt={title}
+              fill
+              sizes="(max-width: 768px) 90vw, 33vw"
+              className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            />
+          ) : (
+            <div className="size-full bg-linear-to-br from-neutral-200 to-neutral-100 dark:from-neutral-800 dark:to-neutral-900" />
+          )}
 
           {/* Dark gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
 
           {/* Category badge */}
           {category && (
@@ -108,12 +146,16 @@ export function StartupCard({ post }: { post: StartupCardItem }) {
             {author ? (
               <div className="flex items-center gap-2">
                 <div className="size-6 shrink-0 overflow-hidden rounded-full ring-1 ring-neutral-200 dark:ring-white/10">
-                  {author.image ? (
-                    <SanityImage
-                      image={author.image}
-                      className="size-full object-cover"
-                      alt={author.name}
-                    />
+                  {authorImage ? (
+                    <div className="relative size-full">
+                      <Image
+                        src={authorImage}
+                        alt={author.name ?? "Author"}
+                        fill
+                        sizes="24px"
+                        className="size-full object-cover"
+                      />
+                    </div>
                   ) : (
                     <div className="flex size-full items-center justify-center bg-neutral-100 text-xs font-medium text-neutral-500 dark:bg-neutral-800 dark:text-white/50">
                       {author.name?.charAt(0)}

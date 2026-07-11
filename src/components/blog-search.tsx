@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@workspace/ui/components/input";
+import { Input } from "@/components/input";
 import { cn } from "@/lib/utils";
 import { Search, X } from "lucide-react";
 

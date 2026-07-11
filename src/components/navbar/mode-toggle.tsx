@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@workspace/ui/components/button";
+import { Button } from "@/components/button";
 import { cn } from "@/lib/utils";
 import { motion, useMotionValue, useTransform } from "motion/react";
 import { useTheme } from "next-themes";

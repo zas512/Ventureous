@@ -3,8 +3,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@workspace/ui/components/accordion";
-import { Badge } from "@workspace/ui/components/badge";
+} from "@/components/accordion";
+import { Badge } from "@/components/badge";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 

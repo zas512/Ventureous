@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@workspace/ui/components/button";
-import { Skeleton } from "@workspace/ui/components/skeleton";
+import { Button } from "@/components/button";
+import { Skeleton } from "@/components/skeleton";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 

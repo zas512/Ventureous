@@ -1,42 +1,41 @@
 "use client";
-
-import type { QueryStartupsResult } from "@workspace/sanity/types";
-import { Input } from "@workspace/ui/components/input";
-import Fuse from "fuse.js";
+import { Input } from "@/components/input";
 import { Search, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-
 import { StartupCard } from "./startup-card";
+import type { StartupCardItem } from "./startup-card";
 
 type Props = {
-  startups: QueryStartupsResult;
+  startups: StartupCardItem[];
 };
 
-/**
- * Client-side fuzzy search over a list of startups using Fuse.js.
- * Syncs the active query with the ?query= search param.
- * Returns a filtered grid of StartupCard components.
- */
-export function StartupSearch({ startups }: Props) {
+export function StartupSearch({ startups }: Readonly<Props>) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [query, setQuery] = useState(searchParams.get("query") ?? "");
 
-  const fuse = useMemo(
-    () =>
-      new Fuse(startups, {
-        keys: ["title", "category", "author.name", "description"],
-        threshold: 0.4,
-      }),
-    [startups]
-  );
+  const normalizedQuery = query.trim().toLowerCase();
 
-  const results = useMemo(
-    () =>
-      query.trim() ? fuse.search(query.trim()).map((r) => r.item) : startups,
-    [query, fuse, startups]
-  );
+  const results = useMemo(() => {
+    if (!normalizedQuery) {
+      return startups;
+    }
+
+    return startups.filter((startup) => {
+      const haystack = [
+        startup.title,
+        startup.category,
+        startup.author?.name,
+        startup.description
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(normalizedQuery);
+    });
+  }, [normalizedQuery, startups]);
 
   function handleChange(value: string) {
     setQuery(value);

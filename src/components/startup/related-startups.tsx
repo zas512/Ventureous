@@ -9,7 +9,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@workspace/ui/components/carousel";
+} from "@/components/carousel";
 
 import { Tag } from "@/components/shared/tag";
 import { StartupCard } from "./startup-card";

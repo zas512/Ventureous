@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "@workspace/ui/components/button";
+import { Button } from "@/components/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@workspace/ui/components/dialog";
+} from "@/components/dialog";
 import { signIn } from "next-auth/react";
 
 type SignInModalProps = {

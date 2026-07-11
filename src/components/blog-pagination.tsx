@@ -6,7 +6,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@workspace/ui/components/pagination";
+} from "@/components/pagination";
 import { useCallback } from "react";
 
 export type PaginationProps = {

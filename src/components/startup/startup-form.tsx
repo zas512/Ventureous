@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@workspace/ui/components/button";
-import { Input } from "@workspace/ui/components/input";
-import { Label } from "@workspace/ui/components/label";
-import { Textarea } from "@workspace/ui/components/textarea";
+import { Button } from "@/components/button";
+import { Input } from "@/components/input";
+import { Label } from "@/components/label";
+import { Textarea } from "@/components/textarea";
 import {
   AlertCircle,
   ArrowLeft,
