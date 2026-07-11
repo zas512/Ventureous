@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/button";
 import { cn } from "@/lib/utils";
 import { XIcon } from "lucide-react";
@@ -153,5 +152,5 @@ export {
   DialogOverlay,
   DialogPortal,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 };

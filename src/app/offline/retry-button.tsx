@@ -1,8 +1,5 @@
 "use client";
 
-/**
- * Reloads the page to retry the failed navigation.
- */
 export function RetryButton() {
   return (
     <button

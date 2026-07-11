@@ -1,20 +1,23 @@
 "use client";
-
-import type { QueryBlogIndexPageDataResult } from "@workspace/sanity/types";
 import { Search, X } from "lucide-react";
-
 import { BlogHeader } from "@/components/blog-card";
 import { BlogPagination } from "@/components/blog-pagination";
 import { BlogSearchResults } from "@/components/blog-search-results";
 import { BlogSection } from "@/components/blog-section";
-import { PageBuilder } from "@/components/pagebuilder";
 import { Tag } from "@/components/shared/tag";
 import { useBlogSearch } from "@/hooks/use-blog-search";
+import type { PaginationMetadata } from "@/lib/utils";
 import type { Blog } from "@/types";
-import type { PaginationMetadata } from "@/utils";
+
+type BlogIndexPageData = {
+  title: string | null;
+  description: string | null;
+  featuredBlogsCount?: string | null;
+  displayFeaturedBlogs?: boolean | null;
+};
 
 type BlogPageContentProps = {
-  indexPageData: NonNullable<QueryBlogIndexPageDataResult>;
+  indexPageData: BlogIndexPageData;
   blogs: Blog[];
   paginationMetadata: PaginationMetadata;
 };
@@ -22,20 +25,13 @@ type BlogPageContentProps = {
 export function BlogPageContent({
   indexPageData,
   blogs,
-  paginationMetadata,
-}: BlogPageContentProps) {
-  const {
-    title,
-    description,
-    pageBuilder = [],
-    _id,
-    _type,
-    featuredBlogsCount,
-    displayFeaturedBlogs,
-  } = indexPageData;
+  paginationMetadata
+}: Readonly<BlogPageContentProps>) {
+  const { title, description, featuredBlogsCount, displayFeaturedBlogs } =
+    indexPageData;
 
   const { searchQuery, setSearchQuery, results, isSearching, hasQuery, error } =
-    useBlogSearch();
+    useBlogSearch(blogs);
 
   const validFeaturedBlogsCount = featuredBlogsCount
     ? Number.parseInt(featuredBlogsCount, 10)
@@ -59,8 +55,8 @@ export function BlogPageContent({
     <main className="min-h-screen pb-24">
       {/* Hero */}
       <section className="relative overflow-hidden pt-32 pb-16">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-pink-500/5 via-transparent to-transparent" />
-        <div className="pointer-events-none absolute inset-0 opacity-5 [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:4rem_4rem]" />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-pink-500/5 via-transparent to-transparent" />
+        <div className="pointer-events-none absolute inset-0 opacity-5 bg-[linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] bg-size-[4rem_4rem]" />
 
         <div className="relative mx-auto max-w-5xl px-6 text-center">
           <Tag>Blog</Tag>
@@ -123,10 +119,6 @@ export function BlogPageContent({
           </>
         )}
       </section>
-
-      {pageBuilder && pageBuilder.length > 0 && (
-        <PageBuilder id={_id} pageBuilder={pageBuilder} type={_type} />
-      )}
     </main>
   );
 }

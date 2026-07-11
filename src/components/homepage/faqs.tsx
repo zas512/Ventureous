@@ -6,9 +6,19 @@ import { useState } from "react";
 
 import { RichText } from "@/components/elements/rich-text";
 import { Tag } from "@/components/shared/tag";
-import type { PagebuilderType } from "@/types";
 
-type FaqsSectionProps = PagebuilderType<"faqSection">;
+type FaqItem = {
+  _id: string;
+  title?: string | null;
+  richText?: unknown[] | null;
+};
+
+type FaqsSectionProps = {
+  eyebrow?: string | null;
+  title?: string | null;
+  subtitle?: string | null;
+  faqs?: FaqItem[] | null;
+};
 
 export function Faqs({ eyebrow, title, subtitle, faqs }: FaqsSectionProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -41,7 +51,7 @@ export function Faqs({ eyebrow, title, subtitle, faqs }: FaqsSectionProps) {
             <button
               key={faq?._id}
               type="button"
-              className="w-full cursor-pointer rounded-2xl border border-neutral-200/60 dark:border-white/10 bg-gradient-to-b from-neutral-50 to-white shadow-sm dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none p-6 text-left transition hover:shadow-md hover:border-neutral-300/60 dark:hover:border-white/20 dark:hover:shadow-none"
+              className="w-full cursor-pointer rounded-2xl border border-neutral-200/60 dark:border-white/10 bg-linear-to-b from-neutral-50 to-white shadow-sm dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none p-6 text-left transition hover:shadow-md hover:border-neutral-300/60 dark:hover:border-white/20 dark:hover:shadow-none"
               onClick={() =>
                 setSelectedIndex(selectedIndex === faqIndex ? -1 : faqIndex)
               }

@@ -3,9 +3,12 @@
 import { motion } from "motion/react";
 
 import { SanityImage } from "@/components/elements/sanity-image";
-import type { PagebuilderType } from "@/types";
 
-type LogoTickerProps = PagebuilderType<"logoTickerSection">;
+type LogoTickerProps = {
+  title?: string | null;
+  logos?: Array<{ id?: string | null; url?: string | null }> | null;
+  speed?: number;
+};
 
 export function LogoTicker({ title, logos, speed = 30 }: LogoTickerProps) {
   if (!logos || logos.length === 0) return null;

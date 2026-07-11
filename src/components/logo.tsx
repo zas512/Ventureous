@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { Maybe, SanityImageProps } from "@/types";
+import type { Maybe } from "@/types";
 import { SanityImage } from "./elements/sanity-image";
 
 const LOGO_URL =
@@ -9,7 +9,7 @@ const LOGO_URL =
 
 type LogoProps = {
   src?: Maybe<string>;
-  image?: Maybe<SanityImageProps>;
+  image?: Maybe<{ id?: string | null; url?: string | null; alt?: string | null }>;
   alt?: Maybe<string>;
   width?: number;
   height?: number;

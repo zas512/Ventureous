@@ -1,30 +1,53 @@
 "use client";
-import {
-  processImageData,
-  SANITY_BASE_URL,
-  type SanityImageProps,
-} from "@workspace/sanity/image";
-import { type ElementType, memo } from "react";
-import {
-  SanityImage as BaseSanityImage,
-  type WrapperProps,
-} from "sanity-image";
 
-// Image wrapper component
-const ImageWrapper = <T extends ElementType = "img">(
-  props: WrapperProps<T>
-) => <BaseSanityImage baseUrl={SANITY_BASE_URL} {...props} />;
+import { memo } from "react";
 
-// Main component
-function SanityImageUnmemorized({ image, ...props }: SanityImageProps) {
-  const processedImageData = processImageData(image);
+type ImageLike = {
+  id?: string | null;
+  url?: string | null;
+  src?: string | null;
+  alt?: string | null;
+  asset?: {
+    url?: string | null;
+  } | null;
+};
 
-  // Early return for invalid image data
-  if (!processedImageData) {
+type SanityImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+  image?: ImageLike | null;
+};
+
+function resolveImageSrc(image?: ImageLike | null): string | null {
+  if (!image) {
     return null;
   }
 
-  return <ImageWrapper {...props} {...processedImageData} />;
+  if (image.url) {
+    return image.url;
+  }
+
+  if (image.src) {
+    return image.src;
+  }
+
+  if (image.asset?.url) {
+    return image.asset.url;
+  }
+
+  if (image.id && (image.id.startsWith("http://") || image.id.startsWith("https://"))) {
+    return image.id;
+  }
+
+  return null;
+}
+
+function SanityImageUnmemorized({ image, alt, ...props }: SanityImageProps) {
+  const src = resolveImageSrc(image);
+
+  if (!src) {
+    return null;
+  }
+
+  return <img alt={alt ?? image?.alt ?? ""} src={src} {...props} />;
 }
 
 export const SanityImage = memo(SanityImageUnmemorized);

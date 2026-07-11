@@ -1,9 +1,6 @@
 "use client";
 
-import { useOptimistic } from "@sanity/visual-editing/react";
-import { env } from "@workspace/env/client";
-import { createDataAttribute } from "next-sanity";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 
 import { Faqs } from "@/components/homepage/faqs";
 import { Hero } from "@/components/homepage/hero";
@@ -20,12 +17,6 @@ export type PageBuilderProps = {
   readonly type: string;
 };
 
-type SanityDataAttributeConfig = {
-  readonly id: string;
-  readonly type: string;
-  readonly path: string;
-};
-
 // Strongly typed component mapping with proper component signatures
 const BLOCK_COMPONENTS = {
   faqAccordion: FaqAccordion,
@@ -37,20 +28,6 @@ const BLOCK_COMPONENTS = {
   faqSection: Faqs,
   // biome-ignore lint/suspicious/noExplicitAny: <any is used to allow for dynamic component rendering>
 } as const satisfies Record<PageBuilderBlockTypes, React.ComponentType<any>>;
-
-/**
- * Helper function to create consistent Sanity data attributes
- */
-function createSanityDataAttribute(config: SanityDataAttributeConfig): string {
-  return createDataAttribute({
-    id: config.id,
-    baseUrl: env.NEXT_PUBLIC_SANITY_STUDIO_URL,
-    projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-    dataset: env.NEXT_PUBLIC_SANITY_DATASET,
-    type: config.type,
-    path: config.path,
-  }).toString();
-}
 
 /**
  * Error fallback component for unknown block types
@@ -80,38 +57,9 @@ function UnknownBlockError({
 }
 
 /**
- * Hook to handle optimistic updates for page builder blocks
- */
-function useOptimisticPageBuilder(
-  initialBlocks: PageBuilderBlock[],
-  documentId: string
-) {
-  // biome-ignore lint/suspicious/noExplicitAny: <any is used to allow for dynamic component rendering>
-  return useOptimistic<PageBuilderBlock[], any>(
-    initialBlocks,
-    (currentBlocks, action) => {
-      if (action.id === documentId && action.document?.pageBuilder) {
-        return action.document.pageBuilder;
-      }
-      return currentBlocks;
-    }
-  );
-}
-
-/**
  * Custom hook for block component rendering logic
  */
-function useBlockRenderer(id: string, type: string) {
-  const createBlockDataAttribute = useCallback(
-    (blockKey: string) =>
-      createSanityDataAttribute({
-        id,
-        type,
-        path: `pageBuilder[_key=="${blockKey}"]`,
-      }),
-    [id, type]
-  );
-
+function useBlockRenderer() {
   const renderBlock = useCallback(
     (block: PageBuilderBlock, _index: number) => {
       const Component =
@@ -128,16 +76,13 @@ function useBlockRenderer(id: string, type: string) {
       }
 
       return (
-        <div
-          data-sanity={createBlockDataAttribute(block._key)}
-          key={`${block._type}-${block._key}`}
-        >
+        <div key={`${block._type}-${block._key}`}>
           {/** biome-ignore lint/suspicious/noExplicitAny: <any is used to allow for dynamic component rendering> */}
           <Component {...(block as any)} />
         </div>
       );
     },
-    [createBlockDataAttribute]
+    []
   );
 
   return { renderBlock };
@@ -148,24 +93,19 @@ function useBlockRenderer(id: string, type: string) {
  */
 export function PageBuilder({
   pageBuilder: initialBlocks = [],
-  id,
-  type,
+  id: _id,
+  type: _type,
 }: PageBuilderProps) {
-  const blocks = useOptimisticPageBuilder(initialBlocks, id);
-  const { renderBlock } = useBlockRenderer(id, type);
-
-  const containerDataAttribute = useMemo(
-    () => createSanityDataAttribute({ id, type, path: "pageBuilder" }),
-    [id, type]
-  );
+  const blocks = initialBlocks;
+  const { renderBlock } = useBlockRenderer();
 
   if (!blocks.length) {
     return null;
   }
 
   return (
-    <main className="flex flex-col" data-sanity={containerDataAttribute}>
-      {blocks.map(renderBlock)}
+    <main className="flex flex-col">
+      {blocks.map((block, index) => renderBlock(block, index))}
     </main>
   );
 }

@@ -2,16 +2,13 @@ import { client } from "@workspace/sanity/client";
 import { sanityFetch } from "@workspace/sanity/live";
 import { querySlugPageData, querySlugPagePaths } from "@workspace/sanity/query";
 import { notFound } from "next/navigation";
-
 import { PageBuilder } from "@/components/pagebuilder";
 import { getSEOMetadata } from "@/lib/seo";
-
-const logger = new Logger("PageSlug");
 
 async function fetchSlugPageData(slug: string) {
   return await sanityFetch({
     query: querySlugPageData,
-    params: { slug },
+    params: { slug }
   });
 }
 
@@ -34,14 +31,13 @@ async function fetchSlugPagePaths() {
     }
     return paths;
   } catch (error) {
-    logger.error("Error fetching slug paths", error);
-    // Return empty array to allow build to continue
+    console.error("Error fetching slug paths", error);
     return [];
   }
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<{ slug: string[] }>;
 }) {
@@ -54,7 +50,7 @@ export async function generateMetadata({
     description: pageData?.description ?? pageData?.seoDescription,
     slug: slugString,
     contentId: pageData?._id,
-    contentType: pageData?._type,
+    contentType: pageData?._type
   });
 }
 
@@ -67,7 +63,7 @@ export async function generateStaticParams() {
 export const dynamicParams = true;
 
 export default async function SlugPage({
-  params,
+  params
 }: {
   params: Promise<{ slug: string[] }>;
 }) {

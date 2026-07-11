@@ -1,6 +1,5 @@
 "use client";
 
-import { env } from "@workspace/env/client";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
@@ -26,7 +25,7 @@ export function Navbar({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const { data, error } = useNavbarData({
+  const { data } = useNavbarData({
     navbarData: initialNavbarData,
     settingsData: initialSettingsData,
   });
@@ -83,14 +82,6 @@ export function Navbar({
           </div>
         </div>
       </nav>
-
-      {error && env.NODE_ENV === "development" && (
-        <div className="mx-auto mt-14 max-w-4xl px-4">
-          <div className="rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-2 text-destructive text-xs">
-            Navigation data fetch error: {error.message}
-          </div>
-        </div>
-      )}
     </header>
   );
 }

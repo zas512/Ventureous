@@ -1,122 +1,75 @@
-import { cn } from "@/lib/utils";
+import { cn, parseChildrenToSlug } from "@/lib/utils";
 import Link from "next/link";
-import { PortableText, type PortableTextReactComponents } from "next-sanity";
 
 import type { SanityRichTextProps } from "@/types";
-import { parseChildrenToSlug } from "@/utils";
 import { SanityImage } from "./sanity-image";
 
-const logger = new Logger("RichText");
+type RichTextChild = {
+  _type?: string;
+  text?: string;
+};
 
-const components: Partial<PortableTextReactComponents> = {
-  block: {
-    h2: ({ children, value }) => {
-      const slug = parseChildrenToSlug(value.children);
+type RichTextBlock = {
+  _type?: string;
+  _key?: string;
+  style?: string;
+  children?: RichTextChild[];
+  href?: string;
+  openInNewTab?: boolean;
+  caption?: string;
+  id?: string;
+};
+
+function getBlockText(block: RichTextBlock): string {
+  return (block.children ?? [])
+    .map((child) => child.text ?? "")
+    .join("")
+    .trim();
+}
+
+function renderTextBlock(block: RichTextBlock) {
+  const text = getBlockText(block);
+  const style = block.style ?? "normal";
+  const slug = parseChildrenToSlug(block.children ?? []);
+
+  switch (style) {
+    case "h2":
       return (
         <h2
           className="scroll-m-20 border-b pb-2 font-semibold text-xl sm:text-2xl md:text-3xl first:mt-0"
           id={slug}
         >
-          {children}
+          {text}
         </h2>
       );
-    },
-    h3: ({ children, value }) => {
-      const slug = parseChildrenToSlug(value.children);
+    case "h3":
       return (
-        <h3
-          className="scroll-m-20 font-semibold text-lg sm:text-xl md:text-2xl"
-          id={slug}
-        >
-          {children}
+        <h3 className="scroll-m-20 font-semibold text-lg sm:text-xl md:text-2xl" id={slug}>
+          {text}
         </h3>
       );
-    },
-    h4: ({ children, value }) => {
-      const slug = parseChildrenToSlug(value.children);
+    case "h4":
       return (
-        <h4
-          className="scroll-m-20 font-semibold text-base sm:text-lg md:text-xl"
-          id={slug}
-        >
-          {children}
+        <h4 className="scroll-m-20 font-semibold text-base sm:text-lg md:text-xl" id={slug}>
+          {text}
         </h4>
       );
-    },
-    h5: ({ children, value }) => {
-      const slug = parseChildrenToSlug(value.children);
+    case "h5":
       return (
-        <h5
-          className="scroll-m-20 font-semibold text-base md:text-lg"
-          id={slug}
-        >
-          {children}
+        <h5 className="scroll-m-20 font-semibold text-base md:text-lg" id={slug}>
+          {text}
         </h5>
       );
-    },
-    h6: ({ children, value }) => {
-      const slug = parseChildrenToSlug(value.children);
+    case "h6":
       return (
-        <h6
-          className="scroll-m-20 font-semibold text-sm md:text-base"
-          id={slug}
-        >
-          {children}
+        <h6 className="scroll-m-20 font-semibold text-sm md:text-base" id={slug}>
+          {text}
         </h6>
       );
-    }
-  },
-  marks: {
-    code: ({ children }) => (
-      <code className="rounded-md border border-neutral-200 bg-opacity-5 p-1 text-sm dark:border-white/10 lg:whitespace-nowrap">
-        {children}
-      </code>
-    ),
-    customLink: ({ children, value }) => {
-      if (!value.href || value.href === "#") {
-        return (
-          <span className="underline decoration-dotted underline-offset-2">
-            Link Broken
-          </span>
-        );
-      }
-      return (
-        <Link
-          aria-label={`Link to ${value?.href}`}
-          className="font-medium text-neutral-500 underline underline-offset-4 transition hover:text-pink-400 dark:text-white/60"
-          href={value.href}
-          prefetch={false}
-          target={value.openInNewTab ? "_blank" : "_self"}
-        >
-          {children}
-        </Link>
-      );
-    }
-  },
-  types: {
-    image: ({ value }) => {
-      if (!value?.id) {
-        return null;
-      }
-      return (
-        <figure className="my-4">
-          <SanityImage
-            className="h-auto w-full rounded-lg"
-            height={900}
-            image={value}
-            width={1600}
-          />
-          {value?.caption && (
-            <figcaption className="mt-2 text-center text-sm text-zinc-500 dark:text-zinc-400">
-              {value.caption}
-            </figcaption>
-          )}
-        </figure>
-      );
-    }
-  },
-  hardBreak: () => <br />
-};
+    default:
+      return <p>{text}</p>;
+  }
+}
 
 export function RichText<T extends SanityRichTextProps>({
   richText,
@@ -136,13 +89,47 @@ export function RichText<T extends SanityRichTextProps>({
         className
       )}
     >
-      <PortableText
-        components={components}
-        onMissingComponent={(_, { nodeType, type }) => {
-          logger.warn(`Missing component: ${nodeType} for type: ${type}`);
-        }}
-        value={richText}
-      />
+      {(richText as RichTextBlock[]).map((block, index) => {
+        if (!block) {
+          return null;
+        }
+
+        if (block._type === "image") {
+          return (
+            <figure className="my-4" key={block._key ?? `image-${index}`}>
+              <SanityImage
+                className="h-auto w-full rounded-lg"
+                height={900}
+                image={block}
+                width={1600}
+              />
+              {block.caption && (
+                <figcaption className="mt-2 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                  {block.caption}
+                </figcaption>
+              )}
+            </figure>
+          );
+        }
+
+        if (block._type === "link" && block.href) {
+          return (
+            <p key={block._key ?? `link-${index}`}>
+              <Link
+                aria-label={`Link to ${block.href}`}
+                className="font-medium text-neutral-500 underline underline-offset-4 transition hover:text-pink-400 dark:text-white/60"
+                href={block.href}
+                prefetch={false}
+                target={block.openInNewTab ? "_blank" : "_self"}
+              >
+                {getBlockText(block) || block.href}
+              </Link>
+            </p>
+          );
+        }
+
+        return <div key={block._key ?? `block-${index}`}>{renderTextBlock(block)}</div>;
+      })}
     </div>
   );
 }

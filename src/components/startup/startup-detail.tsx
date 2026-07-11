@@ -1,4 +1,3 @@
-import type { QueryStartupByIdResult } from "@workspace/sanity/types";
 import { Calendar, Clock, Eye } from "lucide-react";
 import markdownit from "markdown-it";
 import Link from "next/link";
@@ -58,8 +57,34 @@ function extractMarkdownHeadings(markdown: string): MarkdownHeading[] {
   return headings;
 }
 
-type Startup = NonNullable<QueryStartupByIdResult>;
-type Author = NonNullable<Startup["author"]>;
+type Author = {
+  _id: string;
+  name: string;
+  username?: string | null;
+  bio?: string | null;
+  image?: unknown;
+};
+
+type Startup = {
+  _id: string;
+  title: string;
+  description?: string | null;
+  category?: string | null;
+  image?: unknown;
+  pitch?: string | null;
+  author?: Author | null;
+  _createdAt: string;
+  views?: number | null;
+  upvotes?: number | null;
+  aiAnalysis?: {
+    overallScore?: number | null;
+    clarity?: { score?: number | null; feedback?: string | null } | null;
+    marketPositioning?: { score?: number | null; feedback?: string | null } | null;
+    uniqueness?: { score?: number | null; feedback?: string | null } | null;
+    suggestions?: Array<string | null> | null;
+    analyzedAt?: string | null;
+  } | null;
+};
 
 type Props = {
   startup: Startup;
@@ -94,7 +119,7 @@ function AuthorAvatar({
         />
       ) : (
         <div
-          className={`flex size-full items-center justify-center bg-gradient-to-br from-pink-500 to-orange-400 ${textClass} font-bold text-white`}
+          className={`flex size-full items-center justify-center bg-linear-to-br from-pink-500 to-orange-400 ${textClass} font-bold text-white`}
         >
           {author.name?.charAt(0)}
         </div>
@@ -123,7 +148,7 @@ function AuthorSidebarContent({ author }: { author: Author }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-neutral-200/60 dark:border-white/10">
       <div className="h-1 bg-gradient-to-r from-pink-500 via-orange-400 to-pink-500" />
-      <div className="bg-gradient-to-b from-neutral-50/80 to-white p-6 dark:from-white/[0.04] dark:to-transparent">
+      <div className="bg-linear-to-b from-neutral-50/80 to-white p-6 dark:from-white/[0.04] dark:to-transparent">
         <p className="mb-5 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-white/25">
           Pitched by
         </p>

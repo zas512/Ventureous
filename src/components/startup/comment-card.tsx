@@ -1,14 +1,23 @@
 "use client";
 
-import type { QueryCommentsByStartupResult } from "@workspace/sanity/types";
 import { Trash2 } from "lucide-react";
 
 import { SanityImage } from "@/components/elements/sanity-image";
 
-type Comment = QueryCommentsByStartupResult[number];
+export type StartupComment = {
+  _id: string;
+  _createdAt: string;
+  content: string;
+  author?: {
+    _id?: string;
+    name?: string | null;
+    username?: string | null;
+    image?: unknown;
+  } | null;
+};
 
 interface CommentCardProps {
-  comment: Comment;
+  comment: StartupComment;
   currentUserId?: string;
   onDelete: (commentId: string) => void;
 }
@@ -55,7 +64,7 @@ export function CommentCard({
             className="size-full object-cover"
           />
         ) : (
-          <div className="flex size-full items-center justify-center bg-gradient-to-br from-pink-500 to-orange-400 text-xs font-bold text-white">
+          <div className="flex size-full items-center justify-center bg-linear-to-br from-pink-500 to-orange-400 text-xs font-bold text-white">
             {comment.author?.name?.charAt(0) || "?"}
           </div>
         )}

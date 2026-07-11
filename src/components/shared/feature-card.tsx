@@ -15,7 +15,7 @@ export function FeatureCard(props: {
   return (
     <div
       className={cn(
-        "rounded-3xl border border-neutral-200/60 dark:border-white/10 bg-gradient-to-b from-neutral-50 to-white shadow-sm dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none p-6",
+        "rounded-3xl border border-neutral-200/60 dark:border-white/10 bg-linear-to-b from-neutral-50 to-white shadow-sm dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none p-6",
         className
       )}
     >

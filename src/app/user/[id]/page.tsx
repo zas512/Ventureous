@@ -1,16 +1,8 @@
-import { SANITY_BASE_URL } from "@workspace/sanity/image";
-import { sanityFetch } from "@workspace/sanity/live";
-import {
-  queryAuthorById,
-  queryRecentActivityByAuthor,
-  queryStartupsByAuthor,
-} from "@workspace/sanity/query";
 import { Calendar, MessageCircle, Rocket } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { auth } from "@/auth";
-import { StartupCard } from "@/components/startup/startup-card";
+import { StartupCard, type StartupCardItem } from "@/components/startup/startup-card";
 import { UserProfileHero } from "@/components/user/user-profile-hero";
 import { getSEOMetadata } from "@/lib/seo";
 
@@ -18,12 +10,128 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
+type DummyAuthor = {
+  _id: string;
+  name: string;
+  username: string;
+  position?: string | null;
+  bio?: string | null;
+  imageUrl?: string | null;
+};
+
+type DummyActivity = {
+  _id: string;
+  _createdAt: string;
+  content: string;
+  startup?: {
+    _id: string;
+    title: string;
+  } | null;
+};
+
+type DummyUserData = {
+  author: DummyAuthor;
+  startups: StartupCardItem[];
+  activity: DummyActivity[];
+};
+
+const DUMMY_USERS: Record<string, DummyUserData> = {
+  "author-1": {
+    author: {
+      _id: "author-1",
+      name: "Ashwin Santiago",
+      username: "ashwin",
+      position: "Founder, PitchPilot",
+      bio: "Building founder-first tools for startup storytelling, investor updates, and launch momentum.",
+      imageUrl: "/images/avatar-ashwin-santiago.jpg",
+    },
+    startups: [
+      {
+        _id: "startup-1",
+        title: "PitchPilot",
+        category: "SaaS",
+        description: "AI-assisted startup storytelling for founders preparing investor updates.",
+        image: "/images/avatar-ashwin-santiago.jpg",
+        author: {
+          name: "Ashwin Santiago",
+          image: "/images/avatar-ashwin-santiago.jpg",
+        },
+        views: 1203,
+        upvotes: 412,
+        _createdAt: "2026-07-01",
+      },
+      {
+        _id: "startup-8",
+        title: "CourseCrafter",
+        category: "EdTech",
+        description: "Build and publish interactive cohort lessons with reusable templates.",
+        image: "/images/avatar-florence-shaw.jpg",
+        author: {
+          name: "Ashwin Santiago",
+          image: "/images/avatar-ashwin-santiago.jpg",
+        },
+        views: 691,
+        upvotes: 244,
+        _createdAt: "2026-06-30",
+      },
+    ],
+    activity: [
+      {
+        _id: "activity-1",
+        _createdAt: "2026-07-09",
+        content: "Great framing. Would love to see investor update templates for pre-seed teams.",
+        startup: { _id: "startup-2", title: "FlowDock" },
+      },
+      {
+        _id: "activity-2",
+        _createdAt: "2026-07-08",
+        content: "This is a strong GTM wedge. The first customer profile looks well-defined.",
+        startup: { _id: "startup-3", title: "MangoMint" },
+      },
+      {
+        _id: "activity-3",
+        _createdAt: "2026-07-07",
+        content: "Nice momentum. Curious about your retention assumptions for month 2.",
+        startup: { _id: "startup-4", title: "RadarLoop" },
+      },
+    ],
+  },
+  "author-2": {
+    author: {
+      _id: "author-2",
+      name: "Florence Shaw",
+      username: "florence",
+      position: "Product Builder",
+      bio: "I build calm, efficient tools for distributed teams.",
+      imageUrl: "/images/avatar-florence-shaw.jpg",
+    },
+    startups: [
+      {
+        _id: "startup-2",
+        title: "FlowDock",
+        category: "Productivity",
+        description: "A focused hub for async team updates, goals, and weekly momentum.",
+        image: "/images/avatar-florence-shaw.jpg",
+        author: {
+          name: "Florence Shaw",
+          image: "/images/avatar-florence-shaw.jpg",
+        },
+        views: 987,
+        upvotes: 356,
+        _createdAt: "2026-06-28",
+      },
+    ],
+    activity: [],
+  },
+};
+
+function getUserData(id: string): DummyUserData | undefined {
+  return DUMMY_USERS[id];
+}
+
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
-  const { data: author } = await sanityFetch({
-    query: queryAuthorById,
-    params: { id },
-  });
+  const author = getUserData(id)?.author;
 
   return getSEOMetadata({
     title: author?.name ?? "User Profile",
@@ -40,26 +148,17 @@ export async function generateMetadata({ params }: Props) {
  */
 export default async function UserProfilePage({ params }: Readonly<Props>) {
   const { id } = await params;
-  const session = await auth();
-  const sessionId = (session as { id?: string })?.id;
-
-  const [{ data: author }, { data: startups }, { data: activity }] =
-    await Promise.all([
-      sanityFetch({ query: queryAuthorById, params: { id } }),
-      sanityFetch({ query: queryStartupsByAuthor, params: { id } }),
-      sanityFetch({ query: queryRecentActivityByAuthor, params: { id } }),
-    ]);
+  const userData = getUserData(id);
+  const author = userData?.author;
+  const startups = userData?.startups ?? [];
+  const activity = userData?.activity ?? [];
 
   if (!author) {
     notFound();
   }
 
-  const isOwner = sessionId === author._id;
-
-  // Resolve Sanity image asset ref to a CDN URL (e.g. "image-abc-1200x800-jpg" → URL)
-  const imageUrl = author.image?.id
-    ? `${SANITY_BASE_URL}${(author.image.id as string).replace("image-", "").replace(/-([^-]+)$/, ".$1")}`
-    : null;
+  const isOwner = false;
+  const imageUrl = author.imageUrl ?? null;
 
   const totalViews =
     startups?.reduce(
@@ -87,7 +186,7 @@ export default async function UserProfilePage({ params }: Readonly<Props>) {
       />
 
       {/* ── Stats strip ── */}
-      <div className="border-b border-neutral-200 bg-neutral-50/80 dark:border-white/5 dark:bg-white/[0.02]">
+      <div className="border-b border-neutral-200 bg-neutral-50/80 dark:border-white/5 dark:bg-white/2">
         <div className="container flex items-center justify-center gap-8 px-6 py-4 sm:justify-start md:gap-12 md:px-10">
           <div className="text-center">
             <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -184,7 +283,7 @@ export default async function UserProfilePage({ params }: Readonly<Props>) {
                       <Link
                         key={item._id}
                         href={`/startup/${item.startup?._id}`}
-                        className="group block rounded-xl px-3 py-3 transition hover:bg-neutral-50 dark:hover:bg-white/[0.03]"
+                        className="group block rounded-xl px-3 py-3 transition hover:bg-neutral-50 dark:hover:bg-white/3"
                       >
                         <p className="line-clamp-2 text-sm leading-relaxed text-neutral-700 dark:text-white/60">
                           &ldquo;{item.content}&rdquo;

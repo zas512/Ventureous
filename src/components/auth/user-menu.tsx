@@ -49,7 +49,7 @@ export function UserMenu() {
         >
           <Avatar className="size-8">
             <AvatarImage src={image ?? undefined} alt={name ?? "User"} />
-            <AvatarFallback className="bg-gradient-to-br from-pink-500 to-purple-600 text-xs font-semibold text-white">
+            <AvatarFallback className="bg-linear-to-br from-pink-500 to-purple-600 text-xs font-semibold text-white">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -66,7 +66,7 @@ export function UserMenu() {
           <div className="flex items-center gap-3">
             <Avatar className="size-9">
               <AvatarImage src={image ?? undefined} alt={name ?? "User"} />
-              <AvatarFallback className="bg-gradient-to-br from-pink-500 to-purple-600 text-xs font-semibold text-white">
+              <AvatarFallback className="bg-linear-to-br from-pink-500 to-purple-600 text-xs font-semibold text-white">
                 {initials}
               </AvatarFallback>
             </Avatar>

@@ -1,10 +1,3 @@
-import { client, urlFor } from "@workspace/sanity/client";
-import { querySettingsData } from "@workspace/sanity/query";
-import type {
-  QueryBlogSlugPageDataResult,
-  QuerySettingsDataResult,
-} from "@workspace/sanity/types";
-import { stegaClean } from "next-sanity";
 import Script from "next/script";
 import type {
   Answer,
@@ -20,7 +13,7 @@ import type {
   WithContext,
 } from "schema-dts";
 
-import { getBaseUrl, handleErrors } from "@/utils";
+import { getBaseUrl } from "@/lib/utils";
 
 type RichTextChild = {
   _type: string;
@@ -41,6 +34,28 @@ type FlexibleFaq = {
   _id: string;
   title: string;
   richText?: RichTextBlock[] | null;
+};
+
+type SettingsData = {
+  siteTitle?: string | null;
+  siteDescription?: string | null;
+  logo?: string | null;
+  contactEmail?: string | null;
+  socialLinks?: Record<string, string | null | undefined> | null;
+};
+
+type ArticleData = {
+  slug?: string | null;
+  title?: string | null;
+  description?: string | null;
+  image?: { id?: string | null; url?: string | null } | null;
+  authors?: {
+    name?: string | null;
+    image?: { id?: string | null; url?: string | null } | null;
+  } | null;
+  publishedAt?: string | null;
+  _createdAt?: string | null;
+  _updatedAt?: string | null;
 };
 
 // Utility function to safely extract plain text from rich text blocks
@@ -89,9 +104,7 @@ export function FaqJsonLd({ faqs }: FaqJsonLdProps) {
     return null;
   }
 
-  const validFaqs = stegaClean(
-    faqs.filter((faq) => faq?.title && faq?.richText)
-  );
+  const validFaqs = faqs.filter((faq) => faq?.title && faq?.richText);
 
   if (!validFaqs.length) {
     return null;
@@ -115,38 +128,33 @@ export function FaqJsonLd({ faqs }: FaqJsonLdProps) {
   return <JsonLdScript data={faqJsonLd} id="faq-json-ld" />;
 }
 
-const IMAGE_SIZE_WIDTH = 1920;
-const IMAGE_SIZE_HEIGHT = 1080;
-const IMAGE_QUALITY = 80;
-
-function buildSafeImageUrl(image?: { id?: string | null }) {
-  if (!image?.id) {
-    return;
+function buildSafeImageUrl(image?: { id?: string | null; url?: string | null }) {
+  if (image?.url) {
+    return image.url;
   }
-  return urlFor({ ...image, _id: image.id })
-    .size(IMAGE_SIZE_WIDTH, IMAGE_SIZE_HEIGHT)
-    .dpr(2)
-    .auto("format")
-    .quality(IMAGE_QUALITY)
-    .url();
+
+  if (image?.id && (image.id.startsWith("http://") || image.id.startsWith("https://"))) {
+    return image.id;
+  }
+
+  return undefined;
 }
 
 // Article JSON-LD Component
 type ArticleJsonLdProps = {
-  readonly article: QueryBlogSlugPageDataResult;
-  readonly settings?: QuerySettingsDataResult;
+  readonly article: ArticleData;
+  readonly settings?: SettingsData;
 };
 export function ArticleJsonLd({
-  article: rawArticle,
+  article,
   settings,
 }: ArticleJsonLdProps) {
-  if (!rawArticle) {
+  if (!article) {
     return null;
   }
-  const article = stegaClean(rawArticle);
 
   const baseUrl = getBaseUrl();
-  const articleUrl = `${baseUrl}${article.slug}`;
+  const articleUrl = `${baseUrl}${article.slug ?? ""}`;
   const imageUrl = buildSafeImageUrl(article.image);
 
   const articleJsonLd: WithContext<Article> = {
@@ -194,13 +202,16 @@ export function ArticleJsonLd({
   };
 
   return (
-    <JsonLdScript data={articleJsonLd} id={`article-json-ld-${article.slug}`} />
+    <JsonLdScript
+      data={articleJsonLd}
+      id={`article-json-ld-${article.slug ?? "article"}`}
+    />
   );
 }
 
 // Organization JSON-LD Component
 type OrganizationJsonLdProps = {
-  readonly settings: QuerySettingsDataResult;
+  readonly settings: SettingsData;
 };
 
 export function OrganizationJsonLd({ settings }: OrganizationJsonLdProps) {
@@ -241,7 +252,7 @@ export function OrganizationJsonLd({ settings }: OrganizationJsonLdProps) {
 
 // Website JSON-LD Component
 type WebSiteJsonLdProps = {
-  readonly settings: QuerySettingsDataResult;
+  readonly settings: SettingsData;
 };
 
 export function WebSiteJsonLd({ settings }: WebSiteJsonLdProps) {
@@ -276,9 +287,11 @@ export async function CombinedJsonLd({
   includeWebsite = false,
   includeOrganization = false,
 }: CombinedJsonLdProps) {
-  const [res] = await handleErrors(client.fetch(querySettingsData));
+  const cleanSettings: SettingsData = {
+    siteTitle: "Ventureous",
+    siteDescription: "A startup discovery and pitch showcase platform.",
+  };
 
-  const cleanSettings = stegaClean(res);
   return (
     <>
       {includeWebsite && cleanSettings && (

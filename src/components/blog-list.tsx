@@ -12,7 +12,7 @@ export function BlogList({ blogs, isLoading = false }: BlogListProps) {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, index) => (
           <article
-            className="overflow-hidden rounded-2xl border border-neutral-200/60 dark:border-white/10 bg-gradient-to-b from-neutral-50 to-white shadow-sm dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none"
+            className="overflow-hidden rounded-2xl border border-neutral-200/60 dark:border-white/10 bg-linear-to-b from-neutral-50 to-white shadow-sm dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none"
             key={`skeleton-${index.toString()}`}
           >
             <div className="aspect-video w-full animate-pulse bg-neutral-100 dark:bg-white/5" />

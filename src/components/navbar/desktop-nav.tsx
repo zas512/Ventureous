@@ -19,14 +19,14 @@ function FeaturedCard({ link }: { link: ColumnLink }) {
   return (
     <Link
       href={link.href}
-      className="group/card relative flex flex-col justify-end overflow-hidden rounded-xl bg-gradient-to-br from-pink-500/10 via-fuchsia-500/10 to-violet-500/10 p-4 transition-colors hover:from-pink-500/15 hover:via-fuchsia-500/15 hover:to-violet-500/15 dark:from-pink-500/5 dark:via-fuchsia-500/5 dark:to-violet-500/5 dark:hover:from-pink-500/10 dark:hover:via-fuchsia-500/10 dark:hover:to-violet-500/10"
+      className="group/card relative flex flex-col justify-end overflow-hidden rounded-xl bg-linear-to-br from-pink-500/10 via-fuchsia-500/10 to-violet-500/10 p-4 transition-colors hover:from-pink-500/15 hover:via-fuchsia-500/15 hover:to-violet-500/15 dark:from-pink-500/5 dark:via-fuchsia-500/5 dark:to-violet-500/5 dark:hover:from-pink-500/10 dark:hover:via-fuchsia-500/10 dark:hover:to-violet-500/10"
     >
       {/* Decorative gradient orb */}
-      <div className="absolute -right-4 -top-4 size-24 rounded-full bg-gradient-to-br from-pink-500/20 to-violet-500/20 blur-2xl transition-opacity group-hover/card:opacity-80 dark:from-pink-500/10 dark:to-violet-500/10" />
+      <div className="absolute -right-4 -top-4 size-24 rounded-full bg-linear-to-br from-pink-500/20 to-violet-500/20 blur-2xl transition-opacity group-hover/card:opacity-80 dark:from-pink-500/10 dark:to-violet-500/10" />
 
       <div className="relative">
         {link.icon && (
-          <div className="mb-3 flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-pink-500 to-violet-600 shadow-md shadow-pink-500/20">
+          <div className="mb-3 flex size-10 items-center justify-center rounded-lg bg-linear-to-br from-pink-500 to-violet-600 shadow-md shadow-pink-500/20">
             <SanityIcon className="size-5 text-white" icon={link.icon} />
           </div>
         )}

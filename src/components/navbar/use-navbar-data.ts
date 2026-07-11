@@ -1,14 +1,4 @@
-import useSWR from "swr";
-
 import type { NavigationData } from "@/types";
-
-const fetcher = async (url: string): Promise<NavigationData> => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Failed to fetch navigation data");
-  }
-  return response.json();
-};
 
 /**
  * Navbar + settings data hook.
@@ -19,15 +9,5 @@ const fetcher = async (url: string): Promise<NavigationData> => {
  * The data refreshes on the next full navigation/load instead.
  */
 export function useNavbarData(initial: NavigationData) {
-  const { data, error } = useSWR<NavigationData>("/api/navigation", fetcher, {
-    fallbackData: initial,
-    revalidateOnFocus: false,
-    revalidateOnMount: false,
-    revalidateOnReconnect: false,
-    refreshInterval: 0,
-    errorRetryCount: 3,
-    errorRetryInterval: 5000,
-  });
-
-  return { data: data || initial, error };
+  return { data: initial, error: undefined };
 }

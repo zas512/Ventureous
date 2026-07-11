@@ -1,8 +1,5 @@
-import { sanityFetch } from "@workspace/sanity/live";
-import { queryAllCategories } from "@workspace/sanity/query";
 import { Lightbulb, Rocket, Users, Zap } from "lucide-react";
 import type { Metadata } from "next";
-
 import { AuthGate } from "@/components/auth/auth-gate";
 import { StartupForm } from "@/components/startup/startup-form";
 import { getSEOMetadata } from "@/lib/seo";
@@ -12,7 +9,7 @@ export function generateMetadata(): Metadata {
     title: "Submit Your Startup Pitch",
     description:
       "Share your startup idea with the community. Submit your pitch and get discovered by investors and fellow founders.",
-    slug: "/startup/create",
+    slug: "/startup/create"
   });
 }
 
@@ -20,20 +17,35 @@ const STEPS = [
   {
     icon: Lightbulb,
     title: "Describe Your Vision",
-    description: "Give your startup a compelling title and short description.",
+    description: "Give your startup a compelling title and short description."
   },
   {
     icon: Zap,
     title: "Craft Your Pitch",
     description:
-      "Use the markdown editor to explain the problem, solution, and traction.",
+      "Use the markdown editor to explain the problem, solution, and traction."
   },
   {
     icon: Users,
     title: "Get Discovered",
     description:
-      "Your pitch goes live instantly for investors and founders to see.",
+      "Your pitch goes live instantly for investors and founders to see."
+  }
+];
+
+const DUMMY_CATEGORIES = [
+  { _id: "cat-ai", title: "AI", slug: "ai" },
+  {
+    _id: "cat-developer-tools",
+    title: "Developer Tools",
+    slug: "developer-tools"
   },
+  { _id: "cat-saas", title: "SaaS", slug: "saas" },
+  { _id: "cat-fintech", title: "Fintech", slug: "fintech" },
+  { _id: "cat-edtech", title: "EdTech", slug: "edtech" },
+  { _id: "cat-security", title: "Security", slug: "security" },
+  { _id: "cat-design", title: "Design", slug: "design" },
+  { _id: "cat-other", title: "Other", slug: "other" }
 ];
 
 /**
@@ -41,8 +53,6 @@ const STEPS = [
  * unauthenticated users are prompted to sign in.
  */
 export default async function CreateStartupPage() {
-  const { data: categories } = await sanityFetch({ query: queryAllCategories });
-
   return (
     <AuthGate>
       <div className="relative overflow-hidden">
@@ -60,7 +70,7 @@ export default async function CreateStartupPage() {
           </div>
           <h1 className="mt-4 text-center text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
             Submit Your{" "}
-            <span className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
               Startup Pitch
             </span>
           </h1>
@@ -74,10 +84,10 @@ export default async function CreateStartupPage() {
             {STEPS.map((step, index) => (
               <div
                 key={step.title}
-                className="group relative rounded-2xl border border-neutral-200/60 bg-gradient-to-b from-neutral-50 to-white p-6 shadow-sm transition hover:shadow-md dark:border-white/10 dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none dark:hover:shadow-none"
+                className="group relative rounded-2xl border border-neutral-200/60 bg-linear-to-b from-neutral-50 to-white p-6 shadow-sm transition hover:shadow-md dark:border-white/10 dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none dark:hover:shadow-none"
               >
                 <div className="mb-4 flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-pink-500/10 to-purple-500/10 dark:from-pink-500/20 dark:to-purple-500/20">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-linear-to-br from-pink-500/10 to-purple-500/10 dark:from-pink-500/20 dark:to-purple-500/20">
                     <step.icon className="size-5 text-pink-500" />
                   </div>
                   <span className="text-xs font-bold uppercase tracking-widest text-neutral-300 dark:text-white/20">
@@ -95,7 +105,7 @@ export default async function CreateStartupPage() {
 
         {/* Form section */}
         <section className="container relative mx-auto max-w-3xl px-4 pb-32">
-          <StartupForm categories={categories ?? []} />
+          <StartupForm categories={DUMMY_CATEGORIES} />
         </section>
       </div>
     </AuthGate>

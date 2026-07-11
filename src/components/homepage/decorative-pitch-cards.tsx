@@ -27,7 +27,7 @@ function PitchCard({
 }: PitchCardProps) {
   return (
     <article
-      className={`${className} select-none overflow-hidden rounded-2xl border border-neutral-200/60 dark:border-white/10 bg-gradient-to-b from-neutral-50 to-white dark:from-neutral-900 dark:to-neutral-900 shadow-2xl shadow-black/10 dark:shadow-black/50`}
+      className={`${className} select-none overflow-hidden rounded-2xl border border-neutral-200/60 dark:border-white/10 bg-linear-to-b from-neutral-50 to-white dark:from-neutral-900 dark:to-neutral-900 shadow-2xl shadow-black/10 dark:shadow-black/50`}
     >
       <div className="relative aspect-video w-full overflow-hidden">
         <div className={`absolute inset-0 ${gradient}`} />
@@ -84,7 +84,7 @@ export function DecorativePitchCardLeft() {
       author="Alex Rivera"
       avatarInitial="A"
       avatarColor="bg-blue-500/20"
-      gradient="bg-gradient-to-br from-blue-700 via-blue-500 to-indigo-400"
+      gradient="bg-linear-to-br from-blue-700 via-blue-500 to-indigo-400"
       radial="bg-[radial-gradient(circle_at_30%_40%,rgba(255,255,255,0.15),transparent_60%)]"
     />
   );
@@ -100,7 +100,7 @@ export function DecorativePitchCardRight() {
       author="Sofia Chen"
       avatarInitial="S"
       avatarColor="bg-amber-500/20"
-      gradient="bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500"
+      gradient="bg-linear-to-br from-amber-500 via-orange-500 to-rose-500"
       radial="bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.2),transparent_50%)]"
       className="w-72"
     />

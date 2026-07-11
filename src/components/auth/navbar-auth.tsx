@@ -1,17 +1,11 @@
 "use client";
-
 import { Button } from "@/components/button";
 import { Skeleton } from "@/components/skeleton";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-
 import { SignInModal } from "./sign-in-modal";
 import { UserMenu } from "./user-menu";
 
-/**
- * Auth controls for the navbar.
- * Shows UserMenu when authenticated, Sign In button when not.
- */
 export function NavbarAuth() {
   const { data: session, status } = useSession();
   const [showModal, setShowModal] = useState(false);

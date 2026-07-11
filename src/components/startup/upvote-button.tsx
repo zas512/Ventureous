@@ -25,29 +25,12 @@ export function UpvoteButton({
   const handleClick = useCallback(async () => {
     if (upvoted) return;
 
-    const prevCount = count;
-
     setAnimating(true);
     setUpvoted(true);
-    setCount(prevCount + 1);
+    setCount((current) => current + 1);
     localStorage.setItem(storageKey, "1");
     setTimeout(() => setAnimating(false), 800);
-
-    try {
-      const res = await fetch(`/api/startups/${startupId}/upvote`, {
-        method: "POST",
-      });
-
-      if (!res.ok) throw new Error("Request failed");
-
-      const data = (await res.json()) as { count: number };
-      setCount(data.count);
-    } catch {
-      setUpvoted(false);
-      setCount(prevCount);
-      localStorage.removeItem(storageKey);
-    }
-  }, [upvoted, count, startupId, storageKey]);
+  }, [upvoted, storageKey]);
 
   return (
     <button

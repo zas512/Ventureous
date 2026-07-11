@@ -387,7 +387,7 @@ function AnalysisContent({ analysis }: { analysis: AiAnalysis }) {
   return (
     <div className="relative py-1">
       {/* Atmospheric background */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-pink-50/20 via-transparent to-violet-50/10 dark:from-pink-500/[0.03] dark:via-transparent dark:to-violet-500/[0.03]" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-pink-50/20 via-transparent to-violet-50/10 dark:from-pink-500/[0.03] dark:via-transparent dark:to-violet-500/[0.03]" />
 
       <div className="relative">
         {/* Dimension rows */}
@@ -479,7 +479,7 @@ export function AiAnalysisPanel({ analysis }: Props) {
           className="relative flex w-full items-center justify-between px-4 py-3.5 transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/[0.02]"
         >
           <div className="flex items-center gap-3">
-            <div className="flex size-8 items-center justify-center rounded-[10px] bg-gradient-to-br from-pink-500/10 to-violet-500/10 dark:from-pink-500/15 dark:to-violet-500/15">
+            <div className="flex size-8 items-center justify-center rounded-[10px] bg-linear-to-br from-pink-500/10 to-violet-500/10 dark:from-pink-500/15 dark:to-violet-500/15">
               <Sparkles className="size-3.5 text-pink-500" />
             </div>
             <div className="text-left">

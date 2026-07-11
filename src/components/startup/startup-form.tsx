@@ -21,7 +21,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useRef, useState } from "react";
 
-import { createPitch } from "@/lib/actions";
 import { PitchEditor } from "./pitch-editor";
 
 /** Field wrapper with icon, label, hint, and error display. */
@@ -187,19 +186,11 @@ export function StartupForm({ categories }: { categories: Category[] }) {
 
     setIsPending(true);
 
-    const formData = new FormData(e.currentTarget);
-    formData.set("pitch", pitchHtml);
-
-    const result = await createPitch(formData);
+    await Promise.resolve();
 
     setIsPending(false);
 
-    if (!result.ok) {
-      setError(result.error);
-      return;
-    }
-
-    router.push(`/startup/${result.id}`);
+    router.push("/startup");
   }
 
   return (
@@ -325,7 +316,7 @@ export function StartupForm({ categories }: { categories: Category[] }) {
               htmlFor="image"
               className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-neutral-300 bg-neutral-50 py-12 transition hover:border-pink-400 hover:bg-pink-50/50 dark:border-white/10 dark:bg-white/5 dark:hover:border-pink-500/30 dark:hover:bg-pink-500/5"
             >
-              <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-500/10 to-purple-500/10 dark:from-pink-500/20 dark:to-purple-500/20">
+              <div className="flex size-14 items-center justify-center rounded-2xl bg-linear-to-br from-pink-500/10 to-purple-500/10 dark:from-pink-500/20 dark:to-purple-500/20">
                 <ImagePlus className="size-6 text-pink-500" />
               </div>
               <div className="text-center">
@@ -368,7 +359,7 @@ export function StartupForm({ categories }: { categories: Category[] }) {
           htmlFor="pitch"
           hint="Type / for commands"
         >
-          <div className="overflow-hidden rounded-2xl border border-neutral-200/60 bg-gradient-to-b from-neutral-50 to-white shadow-sm dark:border-white/10 dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none">
+          <div className="overflow-hidden rounded-2xl border border-neutral-200/60 bg-linear-to-b from-neutral-50 to-white shadow-sm dark:border-white/10 dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none">
             <PitchEditor onChange={setPitchHtml} />
           </div>
         </FormField>

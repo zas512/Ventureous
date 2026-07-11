@@ -1,8 +1,3 @@
-import { sanityFetch } from "@workspace/sanity/live";
-import {
-  queryRelatedStartups,
-  queryTopStartups,
-} from "@workspace/sanity/query";
 import {
   Carousel,
   CarouselContent,
@@ -12,6 +7,7 @@ import {
 } from "@/components/carousel";
 
 import { Tag } from "@/components/shared/tag";
+import type { StartupCardItem } from "./startup-card";
 import { StartupCard } from "./startup-card";
 
 type Props = {
@@ -19,38 +15,73 @@ type Props = {
   excludeId: string;
 };
 
-const MIN_DISPLAY = 3;
-const FETCH_COUNT = 6;
+const DUMMY_RELATED: StartupCardItem[] = [
+  {
+    _id: "demo-related-1",
+    title: "MetricNest",
+    category: "Analytics",
+    description: "Startup KPI walls with collaborative annotation.",
+    _createdAt: "2026-04-05T09:00:00.000Z",
+    views: 1620,
+    upvotes: 96,
+  },
+  {
+    _id: "demo-related-2",
+    title: "Orbit Desk",
+    category: "Operations",
+    description: "Run recurring founder ops from one lightweight console.",
+    _createdAt: "2026-02-25T12:00:00.000Z",
+    views: 2398,
+    upvotes: 134,
+  },
+  {
+    _id: "demo-related-3",
+    title: "Signal Mint",
+    category: "Marketing",
+    description: "Launch social campaigns from idea to analytics in one pass.",
+    _createdAt: "2026-03-11T11:30:00.000Z",
+    views: 1804,
+    upvotes: 109,
+  },
+  {
+    _id: "demo-related-4",
+    title: "Ops Atlas",
+    category: "Infrastructure",
+    description: "Infrastructure cost planning for pre-seed to Series A teams.",
+    _createdAt: "2026-01-29T14:00:00.000Z",
+    views: 1422,
+    upvotes: 88,
+  },
+  {
+    _id: "demo-related-5",
+    title: "PitchPilot",
+    category: "Fundraising",
+    description: "A cleaner workflow for investor updates and deck versions.",
+    _createdAt: "2026-02-17T16:30:00.000Z",
+    views: 2071,
+    upvotes: 121,
+  },
+  {
+    _id: "demo-related-6",
+    title: "Team Loom",
+    category: "Collaboration",
+    description: "Async team rituals that keep execution velocity high.",
+    _createdAt: "2026-03-03T10:45:00.000Z",
+    views: 1538,
+    upvotes: 101,
+  },
+];
 
 /**
  * Server component showing related startups from the same category.
  * Falls back to top pitches when the category has fewer than 3 others.
  */
 export async function RelatedStartups({ categoryRef, excludeId }: Props) {
-  const { data: related } = await sanityFetch({
-    query: queryRelatedStartups,
-    params: { categoryRef, excludeId },
-  });
-
-  let startups = related ?? [];
-  let heading = "More in this category";
-  let tag = "Related";
-
-  if (startups.length < MIN_DISPLAY) {
-    const { data: top } = await sanityFetch({
-      query: queryTopStartups,
-      params: { count: FETCH_COUNT + 1 },
-    });
-
-    const existingIds = new Set([excludeId, ...startups.map((s) => s._id)]);
-    const backfill = (top ?? []).filter((s) => !existingIds.has(s._id));
-    startups = [...startups, ...backfill].slice(0, FETCH_COUNT);
-
-    if ((related ?? []).length === 0) {
-      heading = "Top Pitches";
-      tag = "Trending";
-    }
-  }
+  const startups = DUMMY_RELATED.filter(
+    (startup) => startup._id !== excludeId
+  ).slice(0, 6);
+  const heading = categoryRef ? "More in this category" : "Top Pitches";
+  const tag = categoryRef ? "Related" : "Trending";
 
   if (startups.length === 0) {
     return null;

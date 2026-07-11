@@ -21,7 +21,7 @@ const buttonVariants = cva(
           "hover:from-pink-400 hover:to-purple-500 hover:shadow-xl hover:shadow-pink-500/30",
         ].join(" "),
         destructive: [
-          "bg-gradient-to-b from-red-500 to-red-700 text-white shadow-lg shadow-red-500/25",
+          "bg-linear-to-b from-red-500 to-red-700 text-white shadow-lg shadow-red-500/25",
           "hover:from-red-400 hover:to-red-600 hover:shadow-xl hover:shadow-red-500/35",
         ].join(" "),
         outline: [

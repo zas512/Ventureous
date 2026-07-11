@@ -21,7 +21,7 @@ function readingTime(description: string | null): string {
 export function BlogCard({ blog }: BlogCardProps) {
   if (!blog) {
     return (
-      <article className="overflow-hidden rounded-2xl border border-neutral-200/60 bg-gradient-to-b from-neutral-50 to-white shadow-sm dark:border-white/10 dark:bg-neutral-900 dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none">
+      <article className="overflow-hidden rounded-2xl border border-neutral-200/60 bg-linear-to-b from-neutral-50 to-white shadow-sm dark:border-white/10 dark:bg-neutral-900 dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none">
         <div className="aspect-video w-full animate-pulse bg-neutral-100 dark:bg-white/5" />
         <div className="p-5">
           <div className="h-3 w-24 animate-pulse rounded bg-neutral-100 dark:bg-white/5" />
@@ -57,7 +57,7 @@ export function BlogCard({ blog }: BlogCardProps) {
               image={image}
             />
           ) : (
-            <div className="size-full bg-gradient-to-br from-pink-500/10 to-violet-500/10" />
+            <div className="size-full bg-linear-to-br from-pink-500/10 to-violet-500/10" />
           )}
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-60 dark:from-neutral-900 dark:via-neutral-900/20" />
@@ -131,7 +131,7 @@ export function FeaturedBlogCard({ blog }: BlogCardProps) {
               image={image}
             />
           ) : (
-            <div className="size-full bg-gradient-to-br from-pink-500/10 to-violet-500/10" />
+            <div className="size-full bg-linear-to-br from-pink-500/10 to-violet-500/10" />
           )}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-white/90 max-lg:hidden dark:to-neutral-900/90" />
           <div className="absolute inset-0 bg-gradient-to-t from-white/50 to-transparent lg:hidden dark:from-neutral-900/50" />

@@ -13,7 +13,7 @@ import {
 } from "react";
 
 import type { SanityRichTextBlock, SanityRichTextProps } from "@/types";
-import { convertToSlug } from "@/utils";
+import { convertToSlug } from "@/lib/utils";
 
 // ==========================================================================
 // TYPES

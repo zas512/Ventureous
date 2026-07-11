@@ -10,10 +10,7 @@ import {
   Pencil,
   X,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
-
-import { updateProfile } from "@/lib/actions";
+import { useRef, useState } from "react";
 
 interface AuthorData {
   name: string | null;
@@ -33,9 +30,8 @@ interface UserProfileHeroProps {
  * In edit mode, each field becomes an input in place — same layout, no page jump.
  */
 export function UserProfileHero({ author, isOwner }: UserProfileHeroProps) {
-  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -76,18 +72,13 @@ export function UserProfileHero({ author, isOwner }: UserProfileHeroProps) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
-    const formData = new FormData(e.currentTarget);
+    setIsPending(true);
 
-    startTransition(async () => {
-      const result = await updateProfile(formData);
-      if (!result.ok) {
-        setError(result.error);
-        return;
-      }
+    Promise.resolve().then(() => {
       setIsEditing(false);
       if (imagePreview) URL.revokeObjectURL(imagePreview);
       setImagePreview(null);
-      router.refresh();
+      setIsPending(false);
     });
   }
 
@@ -111,7 +102,7 @@ export function UserProfileHero({ author, isOwner }: UserProfileHeroProps) {
                 className="size-full object-cover"
               />
             ) : (
-              <div className="flex size-full items-center justify-center bg-gradient-to-br from-pink-500 to-purple-600 text-4xl font-bold text-white">
+              <div className="flex size-full items-center justify-center bg-linear-to-br from-pink-500 to-purple-600 text-4xl font-bold text-white">
                 {author.name?.charAt(0)}
               </div>
             )}
@@ -275,7 +266,7 @@ export function UserProfileHero({ author, isOwner }: UserProfileHeroProps) {
   );
 
   const wrapper = (
-    <div className="relative overflow-hidden bg-gradient-to-br from-pink-500/10 via-purple-500/5 to-transparent dark:from-pink-500/5 dark:via-purple-500/[0.02]">
+    <div className="relative overflow-hidden bg-linear-to-br from-pink-500/10 via-purple-500/5 to-transparent dark:from-pink-500/5 dark:via-purple-500/[0.02]">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(236,72,153,0.08),transparent_70%)] dark:bg-[radial-gradient(ellipse_at_top_right,rgba(236,72,153,0.04),transparent_70%)]" />
       {content}
     </div>

@@ -1,5 +1,3 @@
-import { sanityFetch } from "@workspace/sanity/live";
-import { queryPlaylistBySlug } from "@workspace/sanity/query";
 import {
   Carousel,
   CarouselContent,
@@ -9,7 +7,38 @@ import {
 } from "@/components/carousel";
 
 import { Tag } from "@/components/shared/tag";
+import type { StartupCardItem } from "./startup-card";
 import { StartupCard } from "./startup-card";
+
+const DUMMY_PICKS: StartupCardItem[] = [
+  {
+    _id: "demo-pick-1",
+    title: "PulseBoard",
+    category: "SaaS",
+    description: "A live dashboard for product signal and roadmap confidence.",
+    _createdAt: "2026-01-10T08:00:00.000Z",
+    views: 3240,
+    upvotes: 215,
+  },
+  {
+    _id: "demo-pick-2",
+    title: "FieldNote AI",
+    category: "Productivity",
+    description: "Turns meetings and voice notes into clear sprint actions.",
+    _createdAt: "2026-02-02T10:00:00.000Z",
+    views: 2710,
+    upvotes: 181,
+  },
+  {
+    _id: "demo-pick-3",
+    title: "Nexa Recruit",
+    category: "HR Tech",
+    description: "Candidate scoring and role matching built for startup teams.",
+    _createdAt: "2026-03-18T15:00:00.000Z",
+    views: 1987,
+    upvotes: 149,
+  },
+];
 
 /**
  * Server component that fetches the "editors-picks" playlist from Sanity
@@ -17,12 +46,7 @@ import { StartupCard } from "./startup-card";
  * Returns null when the playlist is empty or not found.
  */
 export async function EditorPicks() {
-  const { data: playlist } = await sanityFetch({
-    query: queryPlaylistBySlug,
-    params: { slug: "editors-picks" },
-  });
-
-  const picks = playlist?.select;
+  const picks = DUMMY_PICKS;
 
   if (!picks || picks.length === 0) {
     return null;

@@ -8,11 +8,25 @@ import { Badge } from "@/components/badge";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-import type { PagebuilderType } from "@/types";
 import { RichText } from "../elements/rich-text";
 import { FaqJsonLd } from "../json-ld";
 
-type FaqAccordionProps = PagebuilderType<"faqAccordion">;
+type FaqAccordionProps = {
+  eyebrow?: string | null;
+  title?: string | null;
+  subtitle?: string | null;
+  faqs?: Array<{
+    _id: string;
+    title?: string | null;
+    richText?: unknown[] | null;
+  }> | null;
+  link?: {
+    href?: string | null;
+    title?: string | null;
+    description?: string | null;
+    openInNewTab?: boolean | null;
+  } | null;
+};
 
 export function FaqAccordion({
   eyebrow,

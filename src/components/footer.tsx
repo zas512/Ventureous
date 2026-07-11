@@ -1,16 +1,23 @@
-import { sanityFetch } from "@workspace/sanity/live";
-import { queryFooterData } from "@workspace/sanity/query";
 import Link from "next/link";
 
 import { RichText } from "./elements/rich-text";
 import { TextHoverEffect } from "./shared/text-hover-effect";
 
-export async function FooterServer() {
-  const { data } = await sanityFetch({ query: queryFooterData });
+const FOOTER_RICH_TEXT = [
+  {
+    _type: "block",
+    _key: "footer-copy",
+    children: [
+      {
+        _type: "span",
+        _key: "footer-copy-span",
+        text: "Built for founders shipping ideas quickly. This demo uses static UI content.",
+      },
+    ],
+  },
+];
 
-  if (!data) {
-    return <FooterSkeleton />;
-  }
+export function FooterServer() {
 
   return (
     <footer className="py-8">
@@ -28,7 +35,7 @@ export async function FooterServer() {
       </Link>
       <div className="container mx-auto">
         <RichText
-          richText={data.richText}
+          richText={FOOTER_RICH_TEXT}
           className="prose-sm dark:prose-invert max-w-none text-center prose-p:my-0 prose-p:text-neutral-400 dark:prose-p:text-white/40 prose-p:text-sm"
         />
       </div>

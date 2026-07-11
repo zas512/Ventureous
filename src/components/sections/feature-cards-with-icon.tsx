@@ -6,11 +6,20 @@ import avatar3 from "@/../public/images/avatar-florence-shaw.jpg";
 import avatar2 from "@/../public/images/avatar-lula-meyers.jpg";
 import avatar4 from "@/../public/images/avatar-owen-garcia.jpg";
 import { Tag } from "@/components/shared/tag";
-import type { PagebuilderType } from "@/types";
 import { RichText } from "../elements/rich-text";
 import { IncredibleHighlight } from "./incredible-highlight";
 
-type FeatureCardsWithIconProps = PagebuilderType<"featureCardsIcon">;
+type FeatureCardsWithIconProps = {
+  eyebrow?: string | null;
+  title?: string | null;
+  cards?: Array<{
+    _key?: string;
+    title?: string | null;
+    richText?: unknown[] | null;
+    animationVariant?: string | null;
+  }> | null;
+  features?: string[] | null;
+};
 
 type CardType = NonNullable<FeatureCardsWithIconProps["cards"]>[number];
 
@@ -149,7 +158,7 @@ function FeatureCard({
   return (
     <div
       className={cn(
-        "group rounded-3xl border border-neutral-200/60 dark:border-white/10 bg-gradient-to-b from-neutral-50 to-white shadow-sm dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none p-6 transition duration-500 hover:scale-105 hover:shadow-md dark:hover:shadow-none",
+        "group rounded-3xl border border-neutral-200/60 dark:border-white/10 bg-linear-to-b from-neutral-50 to-white shadow-sm dark:from-neutral-900 dark:to-neutral-900 dark:shadow-none p-6 transition duration-500 hover:scale-105 hover:shadow-md dark:hover:shadow-none",
         className
       )}
     >

@@ -1,12 +1,12 @@
 "use client";
 
-import type { QueryCommentsByStartupResult } from "@workspace/sanity/types";
 import { MessageCircle } from "lucide-react";
 import { useCallback, useState } from "react";
 
-import { CommentCard } from "@/components/startup/comment-card";
+import { CommentCard, type StartupComment } from "@/components/startup/comment-card";
 import { CommentForm } from "@/components/startup/comment-form";
-import { deleteComment } from "@/lib/actions";
+
+type QueryCommentsByStartupResult = StartupComment[];
 
 interface CommentSectionProps {
   startupId: string;
@@ -34,16 +34,10 @@ export function CommentSection({
   );
 
   const handleDelete = useCallback(
-    async (commentId: string) => {
-      const prev = comments;
+    (commentId: string) => {
       setComments((c) => c.filter((item) => item._id !== commentId));
-
-      const result = await deleteComment(commentId);
-      if (!result.ok) {
-        setComments(prev);
-      }
     },
-    [comments]
+    []
   );
 
   return (
